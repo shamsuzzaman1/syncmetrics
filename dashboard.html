@@ -756,18 +756,7 @@
               <div class="status-badge disconnected" id="meta-status">Not connected</div>
             </div>
             <p class="connection-desc">Connect your Meta Ads account so Claude can pull campaign data, spending, ROAS, and performance reports.</p>
-            <button class="btn-connect" id="meta-btn" onclick="toggleMetaToken()">+ Connect Meta Ads</button>
-
-            <div class="token-section" id="meta-token-section">
-              <div class="token-input-row">
-                <input class="token-input" type="password" id="meta-token-input" placeholder="Paste your Meta access token here"/>
-                <button class="btn-save-token" onclick="saveToken('meta')">Save</button>
-              </div>
-              <p class="token-help">
-                Get your token from
-                <a href="https://developers.facebook.com/tools/explorer/" target="_blank">Meta Graph API Explorer →</a>
-              </p>
-            </div>
+            <button class="btn-connect" id="meta-btn" onclick="connectMeta()">+ Connect with Meta</button>
           </div>
 
           <!-- GOOGLE ADS -->
@@ -839,10 +828,10 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    // ── SUPABASE CONFIG ──
-    // Replace these with your actual Supabase project values
+    // ── CONFIG ──
     const SUPABASE_URL = 'https://rstkaditqmateiaodsap.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_aVMHRc7r5SWTTC-C5dl1pw_ov0UI-vh';
+    const RAILWAY_URL = 'https://syncmetrics-server-production.up.railway.app'; // e.g. https://syncmetrics.up.railway.app
 
     const { createClient } = supabase;
     const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -934,11 +923,13 @@
       document.getElementById('user-avatar').textContent = email[0].toUpperCase();
 
       // Set MCP URL
-      const mcpUrl = `https://your-railway-server.up.railway.app/mcp?user=${currentUser.id}`;
+      const mcpUrl = `${RAILWAY_URL}/mcp?user=${currentUser.id}`;
       document.getElementById('mcp-url').textContent = mcpUrl;
 
       // Check existing connections
       await checkConnections();
+      // Check if returning from OAuth
+      checkOAuthReturn();
     }
 
     // ── CHECK EXISTING TOKENS ──
@@ -955,36 +946,10 @@
       }
     }
 
-    // ── META TOKEN TOGGLE ──
-    function toggleMetaToken() {
-      const section = document.getElementById('meta-token-section');
-      section.classList.toggle('visible');
-    }
-
-    // ── SAVE TOKEN ──
-    async function saveToken(platform) {
-      const input = document.getElementById(`${platform}-token-input`);
-      const token = input.value.trim();
-
-      if (!token) return showToast('Please paste your access token first.', 'error');
-
-      // Upsert token into Supabase
-      const { error } = await sb
-        .from('user_tokens')
-        .upsert({
-          user_id: currentUser.id,
-          platform: platform,
-          access_token: token
-        }, { onConflict: 'user_id,platform' });
-
-      if (error) {
-        showToast('Failed to save token. Try again.', 'error');
-      } else {
-        input.value = '';
-        document.getElementById('meta-token-section').classList.remove('visible');
-        setMetaConnected(true);
-        showToast('✓ Meta Ads connected successfully!', 'success');
-      }
+    // ── CONNECT META via OAuth ──
+    function connectMeta() {
+      // Redirect to Railway which redirects to Meta OAuth
+      window.location.href = `${RAILWAY_URL}/oauth/meta?user_id=${currentUser.id}`;
     }
 
     // ── DISCONNECT META ──
@@ -998,6 +963,21 @@
       if (!error) {
         setMetaConnected(false);
         showToast('Meta Ads disconnected.', 'success');
+      }
+    }
+
+    // ── CHECK URL PARAMS (after OAuth redirect back) ──
+    function checkOAuthReturn() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('connected') === 'meta') {
+        setMetaConnected(true);
+        showToast('✓ Meta Ads connected successfully!', 'success');
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+      if (params.get('error') === 'oauth_failed') {
+        showToast('Meta connection failed. Try again.', 'error');
+        window.history.replaceState({}, '', window.location.pathname);
       }
     }
 
@@ -1015,9 +995,9 @@
       } else {
         status.textContent = 'Not connected';
         status.className = 'status-badge disconnected';
-        btn.textContent = '+ Connect Meta Ads';
+        btn.textContent = '+ Connect with Meta';
         btn.className = 'btn-connect';
-        btn.onclick = toggleMetaToken;
+        btn.onclick = connectMeta;
       }
     }
 
