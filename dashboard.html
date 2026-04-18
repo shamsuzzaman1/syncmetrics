@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — SyncMetrics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #05060f;
+      --surface: #0d0f1e;
+      --card: #111326;
+      --border: rgba(255,255,255,0.07);
+      --accent: #4f6ef7;
+      --accent2: #7c3aed;
+      --glow: rgba(79,110,247,0.25);
+      --text: #e8eaf6;
+      --muted: #7b82a8;
+      --white: #ffffff;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── AUTH SCREEN ── */
+    #auth-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: radial-gradient(ellipse at 50% 0%, rgba(79,110,247,0.12) 0%, transparent 60%);
+    }
+
+    .auth-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .auth-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .auth-logo span { color: var(--accent); }
+
+    .auth-tabs {
+      display: flex;
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .auth-tab.active {
+      background: var(--card);
+      color: var(--white);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--accent);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 0.85rem;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 0.5rem;
+      box-shadow: 0 0 20px var(--glow);
+    }
+
+    .btn-primary:hover {
+      background: #3d5ce5;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .auth-message {
+      text-align: center;
+      font-size: 0.85rem;
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .auth-message.error {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.2);
+      color: #fca5a5;
+      display: block;
+    }
+
+    .auth-message.success {
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.2);
+      color: #86efac;
+      display: block;
+    }
+
+    /* ── DASHBOARD ── */
+    #dashboard-screen { display: none; }
+
+    /* SIDEBAR */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 240px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+    }
+
+    .sidebar-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo span { color: var(--accent); }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 0.25rem;
+      text-decoration: none;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: rgba(79,110,247,0.1);
+      color: var(--white);
+    }
+
+    .nav-item.active { color: var(--accent); }
+
+    .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .user-email {
+      font-size: 0.78rem;
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn-logout {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-logout:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    /* MAIN CONTENT */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      padding: 2.5rem;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+
+    .page-sub {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    /* MCP URL CARD */
+    .mcp-card {
+      background: linear-gradient(135deg, rgba(79,110,247,0.1), var(--card));
+      border: 1px solid rgba(79,110,247,0.25);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .mcp-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .mcp-card p {
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .mcp-url-box {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .mcp-url {
+      flex: 1;
+      padding: 0.65rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-family: monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn-copy {
+      padding: 0.65rem 1.2rem;
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      background: rgba(79,110,247,0.1);
+      color: var(--accent);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-copy:hover {
+      background: var(--accent);
+      color: var(--white);
+    }
+
+    /* CONNECTIONS GRID */
+    .connections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .connection-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+    }
+
+    .connection-card:hover {
+      border-color: rgba(79,110,247,0.3);
+      transform: translateY(-2px);
+    }
+
+    .connection-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .connection-platform {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .platform-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .platform-logo.meta { background: rgba(24,119,242,0.15); border: 1px solid rgba(24,119,242,0.2); }
+    .platform-logo.google { background: rgba(234,67,53,0.12); border: 1px solid rgba(234,67,53,0.2); }
+    .platform-logo.analytics { background: rgba(251,188,4,0.12); border: 1px solid rgba(251,188,4,0.2); }
+
+    .platform-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--white);
+    }
+
+    .platform-type {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .status-badge {
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-badge.connected {
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.2);
+      color: var(--success);
+    }
+
+    .status-badge.disconnected {
+      background: rgba(123,130,168,0.1);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .status-badge.coming-soon {
+      background: rgba(245,158,11,0.1);
+      border: 1px solid rgba(245,158,11,0.2);
+      color: var(--warning);
+    }
+
+    .connection-desc {
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+
+    .btn-connect {
+      width: 100%;
+      padding: 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-connect:hover:not(:disabled) {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--white);
+    }
+
+    .btn-connect.connected {
+      border-color: rgba(239,68,68,0.3);
+      color: var(--danger);
+    }
+
+    .btn-connect.connected:hover {
+      background: rgba(239,68,68,0.1);
+      border-color: var(--danger);
+    }
+
+    .btn-connect:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* TOKEN INPUT SECTION */
+    .token-section {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      display: none;
+    }
+
+    .token-section.visible { display: block; }
+
+    .token-input-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .token-input {
+      flex: 1;
+      padding: 0.6rem 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .token-input:focus { border-color: var(--accent); }
+
+    .btn-save-token {
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-save-token:hover { background: #3d5ce5; }
+
+    .token-help {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    .token-help a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 0.85rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      z-index: 999;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: rgba(34,197,94,0.15);
+      border: 1px solid rgba(34,197,94,0.3);
+      color: #86efac;
+    }
+
+    .toast.error {
+      background: rgba(239,68,68,0.15);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: #fca5a5;
+    }
+
+    /* INSTRUCTIONS */
+    .instructions-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+    }
+
+    .instructions-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 1.25rem;
+    }
+
+    .instruction-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .instruction-step {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(79,110,247,0.15);
+      border: 1px solid rgba(79,110,247,0.3);
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .step-text {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .step-text strong { color: var(--text); }
+
+    code {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-family: monospace;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── AUTH SCREEN ── -->
+  <div id="auth-screen">
+    <div class="auth-box">
+      <div class="auth-logo">Sync<span>Metrics</span></div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Log in</button>
+        <button class="auth-tab" onclick="switchTab('signup')">Sign up</button>
+      </div>
+
+      <div id="login-form">
+        <div class="form-group">
+          <label>Email address</label>
+          <input type="email" id="login-email" placeholder="you@example.com"/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="••••••••"/>
+        </div>
+        <button class="btn-primary" onclick="handleLogin()">Log in →</button>
+      </div>
+
+      <div id="signup-form" style="display:none;">
+        <div class="form-group">
+          <label>Email address</label>
+          <input type="email" id="signup-email" placeholder="you@example.com"/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signup-password" placeholder="Min 6 characters"/>
+        </div>
+        <button class="btn-primary" onclick="handleSignup()">Create account →</button>
+      </div>
+
+      <div id="auth-msg" class="auth-message"></div>
+    </div>
+  </div>
+
+  <!-- ── DASHBOARD SCREEN ── -->
+  <div id="dashboard-screen">
+    <div class="layout">
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-logo">Sync<span>Metrics</span></div>
+
+        <nav>
+          <a class="nav-item active" href="#">
+            <span class="nav-icon">⚡</span> Connections
+          </a>
+          <a class="nav-item" href="#">
+            <span class="nav-icon">📊</span> Reports
+          </a>
+          <a class="nav-item" href="#">
+            <span class="nav-icon">⚙️</span> Settings
+          </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="user-info">
+            <div class="user-avatar" id="user-avatar">A</div>
+            <div class="user-email" id="user-email-display">loading...</div>
+          </div>
+          <button class="btn-logout" onclick="handleLogout()">Sign out</button>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="main">
+
+        <div class="page-header">
+          <h1 class="page-title">Your Connections</h1>
+          <p class="page-sub">Connect your ad accounts then add your MCP URL to Claude</p>
+        </div>
+
+        <!-- MCP URL -->
+        <div class="mcp-card">
+          <div class="mcp-card-title">🔗 Your Personal MCP Server URL</div>
+          <p>Copy this URL and paste it into Claude Settings → Integrations → Add MCP Server</p>
+          <div class="mcp-url-box">
+            <div class="mcp-url" id="mcp-url">Loading...</div>
+            <button class="btn-copy" onclick="copyMcpUrl()">Copy URL</button>
+          </div>
+        </div>
+
+        <!-- PLATFORM CARDS -->
+        <div class="connections-grid">
+
+          <!-- META ADS -->
+          <div class="connection-card">
+            <div class="connection-header">
+              <div class="connection-platform">
+                <div class="platform-logo meta">📘</div>
+                <div>
+                  <div class="platform-name">Meta Ads</div>
+                  <div class="platform-type">Facebook & Instagram</div>
+                </div>
+              </div>
+              <div class="status-badge disconnected" id="meta-status">Not connected</div>
+            </div>
+            <p class="connection-desc">Connect your Meta Ads account so Claude can pull campaign data, spending, ROAS, and performance reports.</p>
+            <button class="btn-connect" id="meta-btn" onclick="toggleMetaToken()">+ Connect Meta Ads</button>
+
+            <div class="token-section" id="meta-token-section">
+              <div class="token-input-row">
+                <input class="token-input" type="password" id="meta-token-input" placeholder="Paste your Meta access token here"/>
+                <button class="btn-save-token" onclick="saveToken('meta')">Save</button>
+              </div>
+              <p class="token-help">
+                Get your token from
+                <a href="https://developers.facebook.com/tools/explorer/" target="_blank">Meta Graph API Explorer →</a>
+              </p>
+            </div>
+          </div>
+
+          <!-- GOOGLE ADS -->
+          <div class="connection-card">
+            <div class="connection-header">
+              <div class="connection-platform">
+                <div class="platform-logo google">🔍</div>
+                <div>
+                  <div class="platform-name">Google Ads</div>
+                  <div class="platform-type">Search & Display</div>
+                </div>
+              </div>
+              <div class="status-badge coming-soon">Coming soon</div>
+            </div>
+            <p class="connection-desc">Pull Google Ads data including keywords, Quality Score, impressions, and conversion reports directly into Claude.</p>
+            <button class="btn-connect" disabled>Coming soon</button>
+          </div>
+
+          <!-- GOOGLE ANALYTICS -->
+          <div class="connection-card">
+            <div class="connection-header">
+              <div class="connection-platform">
+                <div class="platform-logo analytics">📊</div>
+                <div>
+                  <div class="platform-name">Google Analytics</div>
+                  <div class="platform-type">GA4</div>
+                </div>
+              </div>
+              <div class="status-badge coming-soon">Coming soon</div>
+            </div>
+            <p class="connection-desc">Connect GA4 to let Claude analyze website traffic, conversions, and audience behavior alongside your ad data.</p>
+            <button class="btn-connect" disabled>Coming soon</button>
+          </div>
+
+        </div>
+
+        <!-- HOW TO USE -->
+        <div class="instructions-card">
+          <div class="instructions-title">📋 How to use your MCP server in Claude</div>
+          <div class="instruction-steps">
+            <div class="instruction-step">
+              <div class="step-num">1</div>
+              <div class="step-text"><strong>Connect Meta Ads above</strong> by pasting your access token and clicking Save.</div>
+            </div>
+            <div class="instruction-step">
+              <div class="step-num">2</div>
+              <div class="step-text"><strong>Copy your MCP URL</strong> from the blue box at the top of this page.</div>
+            </div>
+            <div class="instruction-step">
+              <div class="step-num">3</div>
+              <div class="step-text">Open <strong>Claude.ai → Settings → Integrations</strong> and click <strong>Add MCP Server</strong>.</div>
+            </div>
+            <div class="instruction-step">
+              <div class="step-num">4</div>
+              <div class="step-text">Paste your MCP URL and give it a name like <code>SyncMetrics</code>. Click Save.</div>
+            </div>
+            <div class="instruction-step">
+              <div class="step-num">5</div>
+              <div class="step-text">Start a new chat in Claude and ask: <code>How did my Meta campaigns perform last week?</code></div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── SUPABASE CONFIG ──
+    // Replace these with your actual Supabase project values
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
+    const { createClient } = supabase;
+    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let currentUser = null;
+
+    // ── INIT ──
+    async function init() {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session?.user) {
+        currentUser = session.user;
+        showDashboard();
+      }
+
+      sb.auth.onAuthStateChange((event, session) => {
+        if (session?.user) {
+          currentUser = session.user;
+          showDashboard();
+        } else {
+          currentUser = null;
+          showAuth();
+        }
+      });
+    }
+
+    // ── AUTH TAB SWITCH ──
+    function switchTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+      document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+      clearAuthMsg();
+    }
+
+    // ── LOGIN ──
+    async function handleLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      if (!email || !password) return showAuthMsg('Please fill in all fields.', 'error');
+
+      const btn = document.querySelector('#login-form .btn-primary');
+      btn.disabled = true; btn.textContent = 'Logging in...';
+
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      btn.disabled = false; btn.textContent = 'Log in →';
+
+      if (error) showAuthMsg(error.message, 'error');
+    }
+
+    // ── SIGNUP ──
+    async function handleSignup() {
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      if (!email || !password) return showAuthMsg('Please fill in all fields.', 'error');
+      if (password.length < 6) return showAuthMsg('Password must be at least 6 characters.', 'error');
+
+      const btn = document.querySelector('#signup-form .btn-primary');
+      btn.disabled = true; btn.textContent = 'Creating account...';
+
+      const { error } = await sb.auth.signUp({ email, password });
+      btn.disabled = false; btn.textContent = 'Create account →';
+
+      if (error) showAuthMsg(error.message, 'error');
+      else showAuthMsg('Account created! Check your email to confirm.', 'success');
+    }
+
+    // ── LOGOUT ──
+    async function handleLogout() {
+      await sb.auth.signOut();
+    }
+
+    // ── SHOW/HIDE SCREENS ──
+    function showDashboard() {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('dashboard-screen').style.display = 'block';
+      setupDashboard();
+    }
+
+    function showAuth() {
+      document.getElementById('auth-screen').style.display = 'flex';
+      document.getElementById('dashboard-screen').style.display = 'none';
+    }
+
+    // ── SETUP DASHBOARD ──
+    async function setupDashboard() {
+      // Set user info
+      const email = currentUser.email;
+      document.getElementById('user-email-display').textContent = email;
+      document.getElementById('user-avatar').textContent = email[0].toUpperCase();
+
+      // Set MCP URL
+      const mcpUrl = `https://your-railway-server.up.railway.app/mcp?user=${currentUser.id}`;
+      document.getElementById('mcp-url').textContent = mcpUrl;
+
+      // Check existing connections
+      await checkConnections();
+    }
+
+    // ── CHECK EXISTING TOKENS ──
+    async function checkConnections() {
+      const { data, error } = await sb
+        .from('user_tokens')
+        .select('platform')
+        .eq('user_id', currentUser.id);
+
+      if (data) {
+        data.forEach(row => {
+          if (row.platform === 'meta') setMetaConnected(true);
+        });
+      }
+    }
+
+    // ── META TOKEN TOGGLE ──
+    function toggleMetaToken() {
+      const section = document.getElementById('meta-token-section');
+      section.classList.toggle('visible');
+    }
+
+    // ── SAVE TOKEN ──
+    async function saveToken(platform) {
+      const input = document.getElementById(`${platform}-token-input`);
+      const token = input.value.trim();
+
+      if (!token) return showToast('Please paste your access token first.', 'error');
+
+      // Upsert token into Supabase
+      const { error } = await sb
+        .from('user_tokens')
+        .upsert({
+          user_id: currentUser.id,
+          platform: platform,
+          access_token: token
+        }, { onConflict: 'user_id,platform' });
+
+      if (error) {
+        showToast('Failed to save token. Try again.', 'error');
+      } else {
+        input.value = '';
+        document.getElementById('meta-token-section').classList.remove('visible');
+        setMetaConnected(true);
+        showToast('✓ Meta Ads connected successfully!', 'success');
+      }
+    }
+
+    // ── DISCONNECT META ──
+    async function disconnectMeta() {
+      const { error } = await sb
+        .from('user_tokens')
+        .delete()
+        .eq('user_id', currentUser.id)
+        .eq('platform', 'meta');
+
+      if (!error) {
+        setMetaConnected(false);
+        showToast('Meta Ads disconnected.', 'success');
+      }
+    }
+
+    // ── UPDATE META UI ──
+    function setMetaConnected(connected) {
+      const status = document.getElementById('meta-status');
+      const btn = document.getElementById('meta-btn');
+
+      if (connected) {
+        status.textContent = 'Connected';
+        status.className = 'status-badge connected';
+        btn.textContent = '✕ Disconnect';
+        btn.className = 'btn-connect connected';
+        btn.onclick = disconnectMeta;
+      } else {
+        status.textContent = 'Not connected';
+        status.className = 'status-badge disconnected';
+        btn.textContent = '+ Connect Meta Ads';
+        btn.className = 'btn-connect';
+        btn.onclick = toggleMetaToken;
+      }
+    }
+
+    // ── COPY MCP URL ──
+    function copyMcpUrl() {
+      const url = document.getElementById('mcp-url').textContent;
+      navigator.clipboard.writeText(url);
+      showToast('✓ MCP URL copied to clipboard!', 'success');
+    }
+
+    // ── TOAST ──
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `toast ${type} show`;
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ── AUTH MESSAGES ──
+    function showAuthMsg(msg, type) {
+      const el = document.getElementById('auth-msg');
+      el.textContent = msg;
+      el.className = `auth-message ${type}`;
+    }
+
+    function clearAuthMsg() {
+      const el = document.getElementById('auth-msg');
+      el.className = 'auth-message';
+    }
+
+    init();
+  </script>
+
+</body>
+</html>
