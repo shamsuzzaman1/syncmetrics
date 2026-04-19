@@ -740,17 +740,17 @@
           </div>
         </div>
 
-        <!-- LOOKER STUDIO URL -->
+        <!-- LOOKER STUDIO TOKEN -->
         <div class="mcp-card" style="background: linear-gradient(135deg, rgba(251,188,4,0.08), var(--card)); border-color: rgba(251,188,4,0.2); margin-top: 1rem;">
-          <div class="mcp-card-title">📊 Looker Studio Connector URL</div>
-          <p>Paste into the <strong>SyncMetrics connector</strong> in Looker Studio to pull Meta Ads data into your reports.</p>
+          <div class="mcp-card-title">📊 Looker Studio Connector Token</div>
+          <p>When adding the <strong>SyncMetrics connector</strong> in Looker Studio, paste this token in the authentication step. Your ad accounts will load automatically — no URLs or IDs needed.</p>
           <div class="mcp-url-box">
-            <div class="mcp-url" id="connector-url" style="color: #f59e0b;">Loading...</div>
-            <button class="btn-copy" onclick="copyUrl('connector-url', this)" style="border-color: #f59e0b; color: #f59e0b; background: rgba(251,188,4,0.08);">Copy</button>
+            <div class="mcp-url" id="connector-token" style="color: #f59e0b;">Loading...</div>
+            <button class="btn-copy" onclick="copyUrl('connector-token', this)" style="border-color: #f59e0b; color: #f59e0b; background: rgba(251,188,4,0.08);">Copy</button>
           </div>
           <p style="margin-top: 0.75rem; font-size: 0.8rem;">
-            Don't have the connector yet?
-            <a href="https://lookerstudio.google.com/datasources/create" target="_blank" style="color: #f59e0b; text-decoration: none; font-weight: 600;">Open Looker Studio →</a>
+            Open Looker Studio →
+            <a href="https://lookerstudio.google.com/datasources/create" target="_blank" style="color: #f59e0b; text-decoration: none; font-weight: 600;">Add data source →</a>
           </p>
         </div>
 
@@ -940,9 +940,8 @@ const RAILWAY_URL = 'https://syncmetrics-server.onrender.com';
       const mcpUrl = `${RAILWAY_URL}/mcp/${currentUser.id}`;
       document.getElementById('mcp-url').textContent = mcpUrl;
 
-      // Set Looker Studio Connector URL
-      const connectorUrl = `${RAILWAY_URL}/connector/${currentUser.id}`;
-      document.getElementById('connector-url').textContent = connectorUrl;
+      // Set Looker Studio Connector Token (just the UUID — used in auth step)
+      document.getElementById('connector-token').textContent = currentUser.id;
 
       // Check existing connections
       await checkConnections();
