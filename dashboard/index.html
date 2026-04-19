@@ -946,16 +946,18 @@ const RAILWAY_URL = 'https://syncmetrics-server.onrender.com';
     }
 
     // ── CHECK EXISTING TOKENS ──
+    // Uses server endpoint (service key) to bypass Supabase RLS
     async function checkConnections() {
-      const { data, error } = await sb
-        .from('user_tokens')
-        .select('platform')
-        .eq('user_id', currentUser.id);
-
-      if (data) {
-        data.forEach(row => {
-          if (row.platform === 'meta') setMetaConnected(true);
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        const res = await fetch(`${RAILWAY_URL}/api/connection-status`, {
+          headers: { 'Authorization': `Bearer ${session.access_token}` }
         });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.connected?.includes('meta')) setMetaConnected(true);
+      } catch (e) {
+        console.error('Could not check connections:', e);
       }
     }
 
