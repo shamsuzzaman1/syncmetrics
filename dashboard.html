@@ -733,7 +733,7 @@
         <!-- MCP URL -->
         <div class="mcp-card">
           <div class="mcp-card-title">🔗 Your Personal MCP Server URL</div>
-          <p>Copy this URL and paste it into Claude Settings → Integrations → Add MCP Server</p>
+          <p>This is your personal MCP URL. Copy it and paste into <strong>Claude Settings → Integrations → Add MCP Server</strong></p>
           <div class="mcp-url-box">
             <div class="mcp-url" id="mcp-url">Loading...</div>
             <button class="btn-copy" onclick="copyMcpUrl()">Copy URL</button>
@@ -799,11 +799,11 @@
           <div class="instruction-steps">
             <div class="instruction-step">
               <div class="step-num">1</div>
-              <div class="step-text"><strong>Connect Meta Ads above</strong> by pasting your access token and clicking Save.</div>
+              <div class="step-text"><strong>Click "Connect with Meta"</strong> above to link your Meta Ads account.</div>
             </div>
             <div class="instruction-step">
               <div class="step-num">2</div>
-              <div class="step-text"><strong>Copy your MCP URL</strong> from the blue box at the top of this page.</div>
+              <div class="step-text"><strong>Copy your personal MCP URL</strong> from the blue box at the top of this page.</div>
             </div>
             <div class="instruction-step">
               <div class="step-num">3</div>
@@ -811,11 +811,11 @@
             </div>
             <div class="instruction-step">
               <div class="step-num">4</div>
-              <div class="step-text">Paste your MCP URL and give it a name like <code>SyncMetrics</code>. Click Save.</div>
+              <div class="step-text">Paste your personal MCP URL, name it <code>SyncMetrics</code> and click <strong>Save</strong>.</div>
             </div>
             <div class="instruction-step">
               <div class="step-num">5</div>
-              <div class="step-text">Start a new chat in Claude and ask: <code>How did my Meta campaigns perform last week?</code></div>
+              <div class="step-text">Start a new chat in Claude and ask: <code>What are my Meta ad accounts?</code></div>
             </div>
           </div>
         </div>
@@ -829,9 +829,9 @@
 
   <script>
     // ── CONFIG ──
-    const SUPABASE_URL = 'https://rstkaditqmateiaodsap.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_aVMHRc7r5SWTTC-C5dl1pw_ov0UI-vh';
-    const RAILWAY_URL = 'https://syncmetrics-server-production.up.railway.app'; // e.g. https://syncmetrics.up.railway.app
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const RAILWAY_URL = 'YOUR_RAILWAY_URL'; // e.g. https://syncmetrics.up.railway.app
 
     const { createClient } = supabase;
     const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -923,7 +923,7 @@
       document.getElementById('user-avatar').textContent = email[0].toUpperCase();
 
       // Set MCP URL
-      const mcpUrl = `${RAILWAY_URL}/mcp?user=${currentUser.id}`;
+      const mcpUrl = `${RAILWAY_URL}/mcp/${currentUser.id}`;
       document.getElementById('mcp-url').textContent = mcpUrl;
 
       // Check existing connections
