@@ -32,7 +32,7 @@
       min-height: 100vh;
     }
 
-    /* ── AUTH SCREEN ── */
+    /* ── AUTH ── */
     #auth-screen {
       min-height: 100vh;
       display: flex;
@@ -90,9 +90,7 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.3);
     }
 
-    .form-group {
-      margin-bottom: 1rem;
-    }
+    .form-group { margin-bottom: 1rem; }
 
     .form-group label {
       display: block;
@@ -116,9 +114,7 @@
       transition: border-color 0.2s;
     }
 
-    .form-group input:focus {
-      border-color: var(--accent);
-    }
+    .form-group input:focus { border-color: var(--accent); }
 
     .btn-primary {
       width: 100%;
@@ -136,16 +132,8 @@
       box-shadow: 0 0 20px var(--glow);
     }
 
-    .btn-primary:hover {
-      background: #3d5ce5;
-      transform: translateY(-1px);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .btn-primary:hover { background: #3d5ce5; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
     .auth-message {
       text-align: center;
@@ -170,17 +158,17 @@
       display: block;
     }
 
-    /* ── DASHBOARD ── */
+    /* ── LAYOUT ── */
     #dashboard-screen { display: none; }
 
-    /* SIDEBAR */
     .layout {
       display: flex;
       min-height: 100vh;
     }
 
+    /* ── SIDEBAR ── */
     .sidebar {
-      width: 240px;
+      width: 220px;
       background: var(--surface);
       border-right: 1px solid var(--border);
       padding: 1.5rem;
@@ -195,36 +183,52 @@
       font-size: 1.2rem;
       font-weight: 800;
       color: var(--white);
-      margin-bottom: 2.5rem;
-      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
       border-bottom: 1px solid var(--border);
     }
 
     .sidebar-logo span { color: var(--accent); }
 
+    .nav-section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin: 1.25rem 0 0.5rem 0.85rem;
+    }
+
     .nav-item {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      padding: 0.65rem 0.85rem;
+      padding: 0.6rem 0.85rem;
       border-radius: 10px;
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.15rem;
       text-decoration: none;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
     }
 
-    .nav-item:hover, .nav-item.active {
-      background: rgba(79,110,247,0.1);
-      color: var(--white);
+    .nav-item:hover {
+      background: rgba(79,110,247,0.08);
+      color: var(--text);
     }
 
-    .nav-item.active { color: var(--accent); }
+    .nav-item.active {
+      background: rgba(79,110,247,0.12);
+      color: var(--accent);
+    }
 
-    .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+    .nav-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
 
     .sidebar-bottom {
       margin-top: auto;
@@ -240,8 +244,8 @@
     }
 
     .user-avatar {
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       display: flex;
@@ -254,7 +258,7 @@
     }
 
     .user-email {
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       color: var(--muted);
       overflow: hidden;
       text-overflow: ellipsis;
@@ -269,30 +273,27 @@
       background: transparent;
       color: var(--muted);
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
       transition: all 0.2s;
     }
 
-    .btn-logout:hover {
-      border-color: var(--danger);
-      color: var(--danger);
-    }
+    .btn-logout:hover { border-color: var(--danger); color: var(--danger); }
 
-    /* MAIN CONTENT */
+    /* ── MAIN ── */
     .main {
-      margin-left: 240px;
+      margin-left: 220px;
       flex: 1;
       padding: 2.5rem;
+      max-width: calc(100vw - 220px);
     }
 
-    .page-header {
-      margin-bottom: 2rem;
-    }
+    /* ── PAGE HEADER ── */
+    .page-header { margin-bottom: 2rem; }
 
     .page-title {
       font-family: 'Syne', sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 800;
       color: var(--white);
       letter-spacing: -0.5px;
@@ -300,22 +301,119 @@
 
     .page-sub {
       color: var(--muted);
-      font-size: 0.9rem;
-      margin-top: 0.25rem;
+      font-size: 0.875rem;
+      margin-top: 0.3rem;
     }
 
-    /* MCP URL CARD */
-    .mcp-card {
-      background: linear-gradient(135deg, rgba(79,110,247,0.1), var(--card));
-      border: 1px solid rgba(79,110,247,0.25);
+    /* ── TAB PANEL ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── CONNECTIONS ── */
+    .connections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .connection-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: all 0.3s;
+    }
+
+    .connection-card:hover {
+      border-color: rgba(79,110,247,0.25);
+      transform: translateY(-2px);
+    }
+
+    .connection-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .connection-platform {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .platform-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .platform-logo.meta  { background: rgba(24,119,242,0.15); border: 1px solid rgba(24,119,242,0.2); }
+    .platform-logo.google { background: rgba(234,67,53,0.12);  border: 1px solid rgba(234,67,53,0.2); }
+    .platform-logo.ga    { background: rgba(251,188,4,0.12);   border: 1px solid rgba(251,188,4,0.2); }
+
+    .platform-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--white);
+    }
+
+    .platform-type { font-size: 0.77rem; color: var(--muted); }
+
+    .status-badge {
+      padding: 0.28rem 0.7rem;
+      border-radius: 100px;
+      font-size: 0.73rem;
+      font-weight: 600;
+    }
+
+    .status-badge.connected    { background: rgba(34,197,94,0.12);  border: 1px solid rgba(34,197,94,0.2);  color: var(--success); }
+    .status-badge.disconnected { background: rgba(123,130,168,0.1); border: 1px solid var(--border);          color: var(--muted); }
+    .status-badge.coming-soon  { background: rgba(245,158,11,0.1);  border: 1px solid rgba(245,158,11,0.2); color: var(--warning); }
+
+    .connection-desc {
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+
+    .btn-connect {
+      width: 100%;
+      padding: 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-connect:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); color: var(--white); }
+    .btn-connect.connected { border-color: rgba(239,68,68,0.3); color: var(--danger); }
+    .btn-connect.connected:hover { background: rgba(239,68,68,0.1); border-color: var(--danger); }
+    .btn-connect:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── INFO CARDS (MCP + Looker) ── */
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 16px;
       padding: 1.75rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
-    .mcp-card-title {
+    .info-card-title {
       font-family: 'Syne', sans-serif;
-      font-size: 0.9rem;
+      font-size: 1rem;
       font-weight: 700;
       color: var(--white);
       margin-bottom: 0.4rem;
@@ -324,19 +422,20 @@
       gap: 0.5rem;
     }
 
-    .mcp-card p {
-      font-size: 0.83rem;
+    .info-card p {
+      font-size: 0.85rem;
       color: var(--muted);
       margin-bottom: 1rem;
+      line-height: 1.55;
     }
 
-    .mcp-url-box {
+    .url-row {
       display: flex;
       gap: 0.75rem;
       align-items: center;
     }
 
-    .mcp-url {
+    .url-box {
       flex: 1;
       padding: 0.65rem 1rem;
       background: var(--bg);
@@ -364,250 +463,12 @@
       white-space: nowrap;
     }
 
-    .btn-copy:hover {
-      background: var(--accent);
-      color: var(--white);
-    }
+    .btn-copy:hover { background: var(--accent); color: var(--white); }
 
-    /* CONNECTIONS GRID */
-    .connections-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 2rem;
-    }
+    /* ── STEPS ── */
+    .steps { display: flex; flex-direction: column; gap: 1rem; }
 
-    .connection-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      transition: all 0.3s;
-    }
-
-    .connection-card:hover {
-      border-color: rgba(79,110,247,0.3);
-      transform: translateY(-2px);
-    }
-
-    .connection-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.25rem;
-    }
-
-    .connection-platform {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .platform-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-    }
-
-    .platform-logo.meta { background: rgba(24,119,242,0.15); border: 1px solid rgba(24,119,242,0.2); }
-    .platform-logo.google { background: rgba(234,67,53,0.12); border: 1px solid rgba(234,67,53,0.2); }
-    .platform-logo.analytics { background: rgba(251,188,4,0.12); border: 1px solid rgba(251,188,4,0.2); }
-
-    .platform-name {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: var(--white);
-    }
-
-    .platform-type {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    .status-badge {
-      padding: 0.3rem 0.75rem;
-      border-radius: 100px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-
-    .status-badge.connected {
-      background: rgba(34,197,94,0.12);
-      border: 1px solid rgba(34,197,94,0.2);
-      color: var(--success);
-    }
-
-    .status-badge.disconnected {
-      background: rgba(123,130,168,0.1);
-      border: 1px solid var(--border);
-      color: var(--muted);
-    }
-
-    .status-badge.coming-soon {
-      background: rgba(245,158,11,0.1);
-      border: 1px solid rgba(245,158,11,0.2);
-      color: var(--warning);
-    }
-
-    .connection-desc {
-      font-size: 0.83rem;
-      color: var(--muted);
-      margin-bottom: 1.25rem;
-      line-height: 1.5;
-    }
-
-    .btn-connect {
-      width: 100%;
-      padding: 0.65rem;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: transparent;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-connect:hover:not(:disabled) {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--white);
-    }
-
-    .btn-connect.connected {
-      border-color: rgba(239,68,68,0.3);
-      color: var(--danger);
-    }
-
-    .btn-connect.connected:hover {
-      background: rgba(239,68,68,0.1);
-      border-color: var(--danger);
-    }
-
-    .btn-connect:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    /* TOKEN INPUT SECTION */
-    .token-section {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-      display: none;
-    }
-
-    .token-section.visible { display: block; }
-
-    .token-input-row {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .token-input {
-      flex: 1;
-      padding: 0.6rem 0.85rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .token-input:focus { border-color: var(--accent); }
-
-    .btn-save-token {
-      padding: 0.6rem 1rem;
-      border: none;
-      border-radius: 8px;
-      background: var(--accent);
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-save-token:hover { background: #3d5ce5; }
-
-    .token-help {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 0.5rem;
-    }
-
-    .token-help a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    /* TOAST */
-    .toast {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      padding: 0.85rem 1.5rem;
-      border-radius: 10px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      z-index: 999;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s;
-    }
-
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    .toast.success {
-      background: rgba(34,197,94,0.15);
-      border: 1px solid rgba(34,197,94,0.3);
-      color: #86efac;
-    }
-
-    .toast.error {
-      background: rgba(239,68,68,0.15);
-      border: 1px solid rgba(239,68,68,0.3);
-      color: #fca5a5;
-    }
-
-    /* INSTRUCTIONS */
-    .instructions-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.75rem;
-    }
-
-    .instructions-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 1.25rem;
-    }
-
-    .instruction-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .instruction-step {
+    .step {
       display: flex;
       gap: 1rem;
       align-items: flex-start;
@@ -632,7 +493,7 @@
     .step-text {
       font-size: 0.875rem;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
     .step-text strong { color: var(--text); }
@@ -647,110 +508,159 @@
       font-family: monospace;
     }
 
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .btn-cta.looker {
+      border: 1px solid #f59e0b;
+      background: rgba(251,188,4,0.1);
+      color: #f59e0b;
+    }
+
+    .btn-cta.looker:hover { background: rgba(251,188,4,0.2); }
+
+    /* ── TRANSPORT BADGE ── */
+    .transport-badges {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+
+    .badge {
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.73rem;
+      font-weight: 600;
+    }
+
+    .badge.sse    { background: rgba(79,110,247,0.12); border: 1px solid rgba(79,110,247,0.25); color: var(--accent); }
+    .badge.http   { background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.25); color: #a78bfa; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1.5rem 0;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      padding: 0.85rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      z-index: 999;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3);  color: #86efac; }
+    .toast.error   { background: rgba(239,68,68,0.15);  border: 1px solid rgba(239,68,68,0.3);  color: #fca5a5; }
+
     @media (max-width: 768px) {
       .sidebar { display: none; }
-      .main { margin-left: 0; padding: 1.5rem; }
+      .main { margin-left: 0; padding: 1.5rem; max-width: 100vw; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── AUTH SCREEN ── -->
-  <div id="auth-screen">
-    <div class="auth-box">
-      <div class="auth-logo">Sync<span>Metrics</span></div>
+<!-- ── AUTH SCREEN ── -->
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-logo">Sync<span>Metrics</span></div>
 
-      <div class="auth-tabs">
-        <button class="auth-tab active" onclick="switchTab('login')">Log in</button>
-        <button class="auth-tab" onclick="switchTab('signup')">Sign up</button>
-      </div>
-
-      <div id="login-form">
-        <div class="form-group">
-          <label>Email address</label>
-          <input type="email" id="login-email" placeholder="you@example.com"/>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="login-password" placeholder="••••••••"/>
-        </div>
-        <button class="btn-primary" onclick="handleLogin()">Log in →</button>
-      </div>
-
-      <div id="signup-form" style="display:none;">
-        <div class="form-group">
-          <label>Email address</label>
-          <input type="email" id="signup-email" placeholder="you@example.com"/>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="signup-password" placeholder="Min 6 characters"/>
-        </div>
-        <button class="btn-primary" onclick="handleSignup()">Create account →</button>
-      </div>
-
-      <div id="auth-msg" class="auth-message"></div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login', this)">Log in</button>
+      <button class="auth-tab" onclick="switchAuthTab('signup', this)">Sign up</button>
     </div>
+
+    <div id="login-form">
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" id="login-email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••"/>
+      </div>
+      <button class="btn-primary" onclick="handleLogin()">Log in →</button>
+    </div>
+
+    <div id="signup-form" style="display:none;">
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" id="signup-email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="signup-password" placeholder="Min 6 characters"/>
+      </div>
+      <button class="btn-primary" onclick="handleSignup()">Create account →</button>
+    </div>
+
+    <div id="auth-msg" class="auth-message"></div>
   </div>
+</div>
 
-  <!-- ── DASHBOARD SCREEN ── -->
-  <div id="dashboard-screen">
-    <div class="layout">
+<!-- ── DASHBOARD SCREEN ── -->
+<div id="dashboard-screen">
+  <div class="layout">
 
-      <!-- SIDEBAR -->
-      <aside class="sidebar">
-        <div class="sidebar-logo">Sync<span>Metrics</span></div>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">Sync<span>Metrics</span></div>
 
-        <nav>
-          <a class="nav-item active" href="/dashboard">
-            <span class="nav-icon">⚡</span> Connections
-          </a>
-          <a class="nav-item" href="/studio">
-            <span class="nav-icon">📊</span> Data Studio
-          </a>
-          <a class="nav-item" href="#">
-            <span class="nav-icon">⚙️</span> Settings
-          </a>
-        </nav>
+      <div class="nav-section-label">Connect</div>
+      <button class="nav-item active" id="nav-connections" onclick="showTab('connections')">
+        <span class="nav-icon">🔗</span> Connections
+      </button>
 
-        <div class="sidebar-bottom">
-          <div class="user-info">
-            <div class="user-avatar" id="user-avatar">A</div>
-            <div class="user-email" id="user-email-display">loading...</div>
-          </div>
-          <button class="btn-logout" onclick="handleLogout()">Sign out</button>
+      <div class="nav-section-label">Use Data</div>
+      <button class="nav-item" id="nav-mcp" onclick="showTab('mcp')">
+        <span class="nav-icon">🤖</span> Claude MCP
+      </button>
+      <button class="nav-item" id="nav-looker" onclick="showTab('looker')">
+        <span class="nav-icon">📊</span> Looker Studio
+      </button>
+
+      <div class="sidebar-bottom">
+        <div class="user-info">
+          <div class="user-avatar" id="user-avatar">A</div>
+          <div class="user-email" id="user-email-display">loading...</div>
         </div>
-      </aside>
+        <button class="btn-logout" onclick="handleLogout()">Sign out</button>
+      </div>
+    </aside>
 
-      <!-- MAIN -->
-      <main class="main">
+    <!-- MAIN -->
+    <main class="main">
 
+      <!-- ══ TAB: CONNECTIONS ══ -->
+      <div class="tab-panel active" id="panel-connections">
         <div class="page-header">
-          <h1 class="page-title">Your Connections</h1>
-          <p class="page-sub">Connect your ad accounts then add your MCP URL to Claude</p>
+          <h1 class="page-title">Connections</h1>
+          <p class="page-sub">Connect your ad platforms — one connection unlocks both Claude MCP and Looker Studio</p>
         </div>
 
-        <!-- MCP URL -->
-        <div class="mcp-card">
-          <div class="mcp-card-title">🤖 Claude MCP Server URL</div>
-          <p>Paste into <strong>Claude Settings → Integrations → Add MCP Server</strong> to use your Meta Ads data inside Claude.</p>
-          <div class="mcp-url-box">
-            <div class="mcp-url" id="mcp-url">Loading...</div>
-            <button class="btn-copy" onclick="copyUrl('mcp-url', this)">Copy</button>
-          </div>
-        </div>
-
-        <!-- LOOKER STUDIO -->
-        <div class="mcp-card" style="background: linear-gradient(135deg, rgba(251,188,4,0.08), var(--card)); border-color: rgba(251,188,4,0.2); margin-top: 1rem;">
-          <div class="mcp-card-title">📊 Looker Studio</div>
-          <p>Pull your Meta Ads data into Looker Studio reports. Click below, find <strong>SyncMetrics</strong>, and sign in — your accounts load automatically.</p>
-          <a href="https://lookerstudio.google.com/datasources/create" target="_blank"
-             style="display:inline-block;margin-top:1rem;padding:0.65rem 1.25rem;border:1px solid #f59e0b;border-radius:8px;background:rgba(251,188,4,0.1);color:#f59e0b;font-size:0.875rem;font-weight:500;text-decoration:none;">
-            Open Looker Studio →
-          </a>
-        </div>
-
-        <!-- PLATFORM CARDS -->
         <div class="connections-grid">
 
           <!-- META ADS -->
@@ -765,7 +675,7 @@
               </div>
               <div class="status-badge disconnected" id="meta-status">Not connected</div>
             </div>
-            <p class="connection-desc">Connect your Meta Ads account so Claude can pull campaign data, spending, ROAS, and performance reports.</p>
+            <p class="connection-desc">Connect your Meta Ads account so Claude and Looker Studio can pull campaign data, spending, and performance reports.</p>
             <button class="btn-connect" id="meta-btn" onclick="connectMeta()">+ Connect with Meta</button>
           </div>
 
@@ -789,7 +699,7 @@
           <div class="connection-card">
             <div class="connection-header">
               <div class="connection-platform">
-                <div class="platform-logo analytics">📊</div>
+                <div class="platform-logo ga">📈</div>
                 <div>
                   <div class="platform-name">Google Analytics</div>
                   <div class="platform-type">GA4</div>
@@ -802,151 +712,249 @@
           </div>
 
         </div>
+      </div>
 
-        <!-- HOW TO USE -->
-        <div class="instructions-card">
-          <div class="instructions-title">📋 How to use your MCP server in Claude</div>
-          <div class="instruction-steps">
-            <div class="instruction-step">
-              <div class="step-num">1</div>
-              <div class="step-text"><strong>Click "Connect with Meta"</strong> above to link your Meta Ads account.</div>
-            </div>
-            <div class="instruction-step">
-              <div class="step-num">2</div>
-              <div class="step-text"><strong>Copy your personal MCP URL</strong> from the blue box at the top of this page.</div>
-            </div>
-            <div class="instruction-step">
-              <div class="step-num">3</div>
-              <div class="step-text">Open <strong>Claude.ai → Settings → Integrations</strong> and click <strong>Add MCP Server</strong>.</div>
-            </div>
-            <div class="instruction-step">
-              <div class="step-num">4</div>
-              <div class="step-text">Paste your personal MCP URL, name it <code>SyncMetrics</code> and click <strong>Save</strong>.</div>
-            </div>
-            <div class="instruction-step">
-              <div class="step-num">5</div>
-              <div class="step-text">Start a new chat in Claude and ask: <code>What are my Meta ad accounts?</code></div>
-            </div>
+      <!-- ══ TAB: MCP ══ -->
+      <div class="tab-panel" id="panel-mcp">
+        <div class="page-header">
+          <h1 class="page-title">Claude MCP Server</h1>
+          <p class="page-sub">Ask Claude questions about your ad data in natural language</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-title">🤖 Your personal MCP URL</div>
+          <p>This URL is unique to your account. Anyone with it can query your ad data — keep it private.</p>
+          <div class="url-row">
+            <div class="url-box" id="mcp-url">Loading…</div>
+            <button class="btn-copy" onclick="copyText('mcp-url', this)">Copy</button>
+          </div>
+          <div class="transport-badges">
+            <span class="badge sse">SSE — Claude Code</span>
+            <span class="badge http">Streamable HTTP — Claude.ai web</span>
           </div>
         </div>
 
-      </main>
-    </div>
+        <div class="info-card">
+          <div class="info-card-title">📋 How to add to Claude.ai (web)</div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">Make sure Meta Ads is <strong>connected</strong> on the Connections tab.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">Open <strong>Claude.ai → Settings → Integrations</strong> and click <strong>Add MCP Server</strong>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">Paste your personal MCP URL above, name it <code>SyncMetrics</code>, click <strong>Save</strong>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-text">Start a new chat and ask: <code>What are my Meta ad accounts?</code></div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="info-card-title">🖥️ How to add to Claude Code (CLI)</div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">Run: <code>claude mcp add syncmetrics --transport sse &lt;your-url&gt;</code></div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">Or edit <code>~/.claude/settings.json</code> and add your URL under <code>mcpServers</code>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ TAB: LOOKER STUDIO ══ -->
+      <div class="tab-panel" id="panel-looker">
+        <div class="page-header">
+          <h1 class="page-title">Looker Studio</h1>
+          <p class="page-sub">Pull your Meta Ads data into Looker Studio dashboards and reports</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-title">📊 How to connect Looker Studio</div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">Make sure Meta Ads is <strong>connected</strong> on the Connections tab first.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">Click the button below to open Looker Studio → <strong>Create data source</strong>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">Search for <strong>SyncMetrics</strong> in the connector list and select it.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-text">Click <strong>Sign in with SyncMetrics</strong> — log in with the same email and password you use here.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">5</div>
+              <div class="step-text">Your ad accounts load automatically. Select an account and click <strong>Connect</strong>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">6</div>
+              <div class="step-text">Click <strong>Create Report</strong> — your Meta Ads data is ready to visualize!</div>
+            </div>
+          </div>
+
+          <a class="btn-cta looker" href="https://lookerstudio.google.com/datasources/create" target="_blank">
+            Open Looker Studio →
+          </a>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-title">📐 Available fields</div>
+          <p>The connector provides the following fields you can use in any Looker Studio chart:</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.5rem;margin-top:0.5rem;">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
+              <span style="color:var(--muted);font-size:0.7rem;display:block;">DIMENSION</span>Date
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
+              <span style="color:var(--muted);font-size:0.7rem;display:block;">DIMENSION</span>Campaign
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
+              <span style="color:var(--muted);font-size:0.7rem;display:block;">DIMENSION</span>Ad Set
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
+              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>Spend (USD)
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
+              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>Impressions
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
+              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>Clicks
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
+              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>CTR (%)
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
+              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>CPC (USD)
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
+              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>CPM (USD)
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
   </div>
+</div>
 
-  <!-- TOAST -->
-  <div class="toast" id="toast"></div>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
-  <script>
-    // ── CONFIG ──
-const SUPABASE_URL = 'https://rstkaditqmateiaodsap.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_aVMHRc7r5SWTTC-C5dl1pw_ov0UI-vh';
-const RAILWAY_URL = 'https://syncmetrics-server.onrender.com';
+<script>
+  const SUPABASE_URL     = 'https://rstkaditqmateiaodsap.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_aVMHRc7r5SWTTC-C5dl1pw_ov0UI-vh';
+  const SERVER_URL       = 'https://syncmetrics-server.onrender.com';
 
-    const { createClient } = supabase;
-    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let currentUser = null;
+  let currentUser = null;
 
-    // ── INIT ──
-    async function init() {
-      const { data: { session } } = await sb.auth.getSession();
+  // ── INIT ──
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session?.user) {
+      currentUser = session.user;
+      showDashboard();
+    }
+
+    sb.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         currentUser = session.user;
         showDashboard();
+      } else {
+        currentUser = null;
+        showAuth();
       }
+    });
+  }
 
-      sb.auth.onAuthStateChange((event, session) => {
-        if (session?.user) {
-          currentUser = session.user;
-          showDashboard();
-        } else {
-          currentUser = null;
-          showAuth();
-        }
-      });
-    }
+  // ── AUTH TAB SWITCH ──
+  function switchAuthTab(tab, btn) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('login-form').style.display  = tab === 'login'  ? 'block' : 'none';
+    document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+    document.getElementById('auth-msg').className = 'auth-message';
+  }
 
-    // ── AUTH TAB SWITCH ──
-    function switchTab(tab) {
-      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
-      document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
-      document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
-      clearAuthMsg();
-    }
+  // ── LOGIN ──
+  async function handleLogin() {
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) return showAuthMsg('Please fill in all fields.', 'error');
+    const btn = document.querySelector('#login-form .btn-primary');
+    btn.disabled = true; btn.textContent = 'Logging in…';
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    btn.disabled = false; btn.textContent = 'Log in →';
+    if (error) showAuthMsg(error.message, 'error');
+  }
 
-    // ── LOGIN ──
-    async function handleLogin() {
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
-      if (!email || !password) return showAuthMsg('Please fill in all fields.', 'error');
+  // ── SIGNUP ──
+  async function handleSignup() {
+    const email    = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value;
+    if (!email || !password) return showAuthMsg('Please fill in all fields.', 'error');
+    if (password.length < 6) return showAuthMsg('Password must be at least 6 characters.', 'error');
+    const btn = document.querySelector('#signup-form .btn-primary');
+    btn.disabled = true; btn.textContent = 'Creating account…';
+    const { error } = await sb.auth.signUp({ email, password });
+    btn.disabled = false; btn.textContent = 'Create account →';
+    if (error) showAuthMsg(error.message, 'error');
+    else showAuthMsg('Account created! Check your email to confirm.', 'success');
+  }
 
-      const btn = document.querySelector('#login-form .btn-primary');
-      btn.disabled = true; btn.textContent = 'Logging in...';
+  // ── LOGOUT ──
+  async function handleLogout() { await sb.auth.signOut(); }
 
-      const { error } = await sb.auth.signInWithPassword({ email, password });
-      btn.disabled = false; btn.textContent = 'Log in →';
+  // ── SHOW SCREENS ──
+  function showDashboard() {
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('dashboard-screen').style.display = 'block';
+    setupDashboard();
+  }
 
-      if (error) showAuthMsg(error.message, 'error');
-    }
+  function showAuth() {
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('dashboard-screen').style.display = 'none';
+  }
 
-    // ── SIGNUP ──
-    async function handleSignup() {
-      const email = document.getElementById('signup-email').value.trim();
-      const password = document.getElementById('signup-password').value;
-      if (!email || !password) return showAuthMsg('Please fill in all fields.', 'error');
-      if (password.length < 6) return showAuthMsg('Password must be at least 6 characters.', 'error');
+  // ── SETUP ──
+  async function setupDashboard() {
+    const email = currentUser.email;
+    document.getElementById('user-email-display').textContent = email;
+    document.getElementById('user-avatar').textContent = email[0].toUpperCase();
+    document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${currentUser.id}`;
 
-      const btn = document.querySelector('#signup-form .btn-primary');
-      btn.disabled = true; btn.textContent = 'Creating account...';
+    await checkConnections();
+    checkOAuthReturn();
+  }
 
-      const { error } = await sb.auth.signUp({ email, password });
-      btn.disabled = false; btn.textContent = 'Create account →';
+  // ── TAB NAVIGATION ──
+  function showTab(tab) {
+    ['connections', 'mcp', 'looker'].forEach(t => {
+      document.getElementById('panel-' + t).classList.toggle('active', t === tab);
+      document.getElementById('nav-' + t).classList.toggle('active', t === tab);
+    });
+  }
 
-      if (error) showAuthMsg(error.message, 'error');
-      else showAuthMsg('Account created! Check your email to confirm.', 'success');
-    }
-
-    // ── LOGOUT ──
-    async function handleLogout() {
-      await sb.auth.signOut();
-    }
-
-    // ── SHOW/HIDE SCREENS ──
-    function showDashboard() {
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('dashboard-screen').style.display = 'block';
-      setupDashboard();
-    }
-
-    function showAuth() {
-      document.getElementById('auth-screen').style.display = 'flex';
-      document.getElementById('dashboard-screen').style.display = 'none';
-    }
-
-    // ── SETUP DASHBOARD ──
-    async function setupDashboard() {
-      // Set user info
-      const email = currentUser.email;
-      document.getElementById('user-email-display').textContent = email;
-      document.getElementById('user-avatar').textContent = email[0].toUpperCase();
-
-      // Set MCP URL
-      const mcpUrl = `${RAILWAY_URL}/mcp/${currentUser.id}`;
-      document.getElementById('mcp-url').textContent = mcpUrl;
-
-      // Set Looker Studio Connector Token (just the UUID — used in auth step)
-      document.getElementById('connector-token').textContent = currentUser.id;
-
-      // Check existing connections
-      await checkConnections();
-      // Check if returning from OAuth
-      checkOAuthReturn();
-    }
-
-    // ── CHECK EXISTING TOKENS ──
-    async function checkConnections() {
+  // ── CHECK CONNECTIONS ──
+  async function checkConnections() {
+    try {
       const { data, error } = await sb
         .from('user_tokens')
         .select('platform')
@@ -957,94 +965,88 @@ const RAILWAY_URL = 'https://syncmetrics-server.onrender.com';
           if (row.platform === 'meta') setMetaConnected(true);
         });
       }
+    } catch (e) {
+      console.error('checkConnections error:', e);
     }
+  }
 
-    // ── CONNECT META via OAuth ──
-    function connectMeta() {
-      // Redirect to Railway which redirects to Meta OAuth
-      window.location.href = `${RAILWAY_URL}/oauth/meta?user_id=${currentUser.id}`;
+  // ── CONNECT META ──
+  function connectMeta() {
+    window.location.href = `${SERVER_URL}/oauth/meta?user_id=${currentUser.id}`;
+  }
+
+  // ── DISCONNECT META ──
+  async function disconnectMeta() {
+    const { error } = await sb
+      .from('user_tokens')
+      .delete()
+      .eq('user_id', currentUser.id)
+      .eq('platform', 'meta');
+
+    if (!error) {
+      setMetaConnected(false);
+      showToast('Meta Ads disconnected.', 'success');
     }
+  }
 
-    // ── DISCONNECT META ──
-    async function disconnectMeta() {
-      const { error } = await sb
-        .from('user_tokens')
-        .delete()
-        .eq('user_id', currentUser.id)
-        .eq('platform', 'meta');
-
-      if (!error) {
-        setMetaConnected(false);
-        showToast('Meta Ads disconnected.', 'success');
-      }
+  // ── OAUTH RETURN ──
+  function checkOAuthReturn() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('connected') === 'meta') {
+      setMetaConnected(true);
+      showToast('✓ Meta Ads connected!', 'success');
+      window.history.replaceState({}, '', window.location.pathname);
     }
-
-    // ── CHECK URL PARAMS (after OAuth redirect back) ──
-    function checkOAuthReturn() {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('connected') === 'meta') {
-        setMetaConnected(true);
-        showToast('✓ Meta Ads connected successfully!', 'success');
-        // Clean URL
-        window.history.replaceState({}, '', window.location.pathname);
-      }
-      if (params.get('error') === 'oauth_failed') {
-        showToast('Meta connection failed. Try again.', 'error');
-        window.history.replaceState({}, '', window.location.pathname);
-      }
+    if (params.get('error') === 'oauth_failed') {
+      showToast('Meta connection failed. Try again.', 'error');
+      window.history.replaceState({}, '', window.location.pathname);
     }
+  }
 
-    // ── UPDATE META UI ──
-    function setMetaConnected(connected) {
-      const status = document.getElementById('meta-status');
-      const btn = document.getElementById('meta-btn');
-
-      if (connected) {
-        status.textContent = 'Connected';
-        status.className = 'status-badge connected';
-        btn.textContent = '✕ Disconnect';
-        btn.className = 'btn-connect connected';
-        btn.onclick = disconnectMeta;
-      } else {
-        status.textContent = 'Not connected';
-        status.className = 'status-badge disconnected';
-        btn.textContent = '+ Connect with Meta';
-        btn.className = 'btn-connect';
-        btn.onclick = connectMeta;
-      }
+  // ── META STATUS UI ──
+  function setMetaConnected(connected) {
+    const status = document.getElementById('meta-status');
+    const btn    = document.getElementById('meta-btn');
+    if (connected) {
+      status.textContent = 'Connected';
+      status.className   = 'status-badge connected';
+      btn.textContent    = '✕ Disconnect';
+      btn.className      = 'btn-connect connected';
+      btn.onclick        = disconnectMeta;
+    } else {
+      status.textContent = 'Not connected';
+      status.className   = 'status-badge disconnected';
+      btn.textContent    = '+ Connect with Meta';
+      btn.className      = 'btn-connect';
+      btn.onclick        = connectMeta;
     }
+  }
 
-    // ── COPY URL ──
-    function copyUrl(elementId, btn) {
-      const url = document.getElementById(elementId).textContent;
-      navigator.clipboard.writeText(url);
-      const orig = btn.textContent;
-      btn.textContent = '✓ Copied!';
-      setTimeout(() => btn.textContent = orig, 2000);
-    }
+  // ── COPY ──
+  function copyText(elementId, btn) {
+    const text = document.getElementById(elementId).textContent;
+    navigator.clipboard.writeText(text);
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  }
 
-    // ── TOAST ──
-    function showToast(msg, type = 'success') {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.className = `toast ${type} show`;
-      setTimeout(() => t.classList.remove('show'), 3500);
-    }
+  // ── TOAST ──
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
 
-    // ── AUTH MESSAGES ──
-    function showAuthMsg(msg, type) {
-      const el = document.getElementById('auth-msg');
-      el.textContent = msg;
-      el.className = `auth-message ${type}`;
-    }
+  // ── AUTH MSG ──
+  function showAuthMsg(msg, type) {
+    const el = document.getElementById('auth-msg');
+    el.textContent = msg;
+    el.className = `auth-message ${type}`;
+  }
 
-    function clearAuthMsg() {
-      const el = document.getElementById('auth-msg');
-      el.className = 'auth-message';
-    }
-
-    init();
-  </script>
-
+  init();
+</script>
 </body>
 </html>
