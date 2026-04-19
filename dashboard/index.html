@@ -732,12 +732,26 @@
 
         <!-- MCP URL -->
         <div class="mcp-card">
-          <div class="mcp-card-title">🔗 Your Personal MCP Server URL</div>
-          <p>This is your personal MCP URL. Copy it and paste into <strong>Claude Settings → Integrations → Add MCP Server</strong></p>
+          <div class="mcp-card-title">🤖 Claude MCP Server URL</div>
+          <p>Paste into <strong>Claude Settings → Integrations → Add MCP Server</strong> to use your Meta Ads data inside Claude.</p>
           <div class="mcp-url-box">
             <div class="mcp-url" id="mcp-url">Loading...</div>
-            <button class="btn-copy" onclick="copyMcpUrl()">Copy URL</button>
+            <button class="btn-copy" onclick="copyUrl('mcp-url', this)">Copy</button>
           </div>
+        </div>
+
+        <!-- LOOKER STUDIO URL -->
+        <div class="mcp-card" style="background: linear-gradient(135deg, rgba(251,188,4,0.08), var(--card)); border-color: rgba(251,188,4,0.2); margin-top: 1rem;">
+          <div class="mcp-card-title">📊 Looker Studio Connector URL</div>
+          <p>Paste into the <strong>SyncMetrics connector</strong> in Looker Studio to pull Meta Ads data into your reports.</p>
+          <div class="mcp-url-box">
+            <div class="mcp-url" id="connector-url" style="color: #f59e0b;">Loading...</div>
+            <button class="btn-copy" onclick="copyUrl('connector-url', this)" style="border-color: #f59e0b; color: #f59e0b; background: rgba(251,188,4,0.08);">Copy</button>
+          </div>
+          <p style="margin-top: 0.75rem; font-size: 0.8rem;">
+            Don't have the connector yet?
+            <a href="https://lookerstudio.google.com/datasources/create" target="_blank" style="color: #f59e0b; text-decoration: none; font-weight: 600;">Open Looker Studio →</a>
+          </p>
         </div>
 
         <!-- PLATFORM CARDS -->
@@ -926,6 +940,10 @@ const RAILWAY_URL = 'https://syncmetrics-server.onrender.com';
       const mcpUrl = `${RAILWAY_URL}/mcp/${currentUser.id}`;
       document.getElementById('mcp-url').textContent = mcpUrl;
 
+      // Set Looker Studio Connector URL
+      const connectorUrl = `${RAILWAY_URL}/connector/${currentUser.id}`;
+      document.getElementById('connector-url').textContent = connectorUrl;
+
       // Check existing connections
       await checkConnections();
       // Check if returning from OAuth
@@ -1001,11 +1019,13 @@ const RAILWAY_URL = 'https://syncmetrics-server.onrender.com';
       }
     }
 
-    // ── COPY MCP URL ──
-    function copyMcpUrl() {
-      const url = document.getElementById('mcp-url').textContent;
+    // ── COPY URL ──
+    function copyUrl(elementId, btn) {
+      const url = document.getElementById(elementId).textContent;
       navigator.clipboard.writeText(url);
-      showToast('✓ MCP URL copied to clipboard!', 'success');
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => btn.textContent = orig, 2000);
     }
 
     // ── TOAST ──
