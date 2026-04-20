@@ -7,109 +7,156 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#05060f;--surface:#0d0f1e;--card:#111326;--border:rgba(255,255,255,0.07);--accent:#4f6ef7;--text:#e8eaf6;--muted:#7b82a8}
-    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+    :root{--bg:#05060f;--surface:#0d0f1e;--border:rgba(255,255,255,0.07);--accent:#4f6ef7;--text:#e8eaf6;--muted:#7b82a8}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.75}
     header{background:var(--surface);border-bottom:1px solid var(--border);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between}
     .logo{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;text-decoration:none}
     .logo span{color:var(--accent)}
-    .container{max-width:780px;margin:0 auto;padding:3rem 2rem}
-    h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;margin-bottom:0.5rem}
-    .updated{color:var(--muted);font-size:0.875rem;margin-bottom:3rem}
-    h2{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 0.75rem}
-    p{color:var(--muted);margin-bottom:1rem;font-size:0.95rem}
-    ul{color:var(--muted);padding-left:1.5rem;margin-bottom:1rem;font-size:0.95rem}
-    li{margin-bottom:0.4rem}
+    nav a{color:var(--muted);font-size:0.875rem;text-decoration:none}
+    nav a:hover{color:#fff}
+    .container{max-width:800px;margin:0 auto;padding:3.5rem 2rem 5rem}
+    h1{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;margin-bottom:0.4rem}
+    .meta{color:var(--muted);font-size:0.875rem;margin-bottom:3rem}
+    h2{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:#fff;margin:2.5rem 0 0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)}
+    h3{font-size:0.95rem;font-weight:600;color:var(--text);margin:1.25rem 0 0.5rem}
+    p{color:var(--muted);margin-bottom:0.9rem;font-size:0.925rem}
+    ul{color:var(--muted);padding-left:1.4rem;margin-bottom:0.9rem;font-size:0.925rem}
+    li{margin-bottom:0.35rem}
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    .divider{height:1px;background:var(--border);margin:2rem 0}
+    .highlight{background:rgba(79,110,247,0.08);border:1px solid rgba(79,110,247,0.2);border-radius:10px;padding:1rem 1.25rem;margin:1.25rem 0}
+    .highlight p{margin:0;font-size:0.875rem}
+    .tag{display:inline-block;padding:0.15rem 0.55rem;border-radius:5px;font-size:0.72rem;font-weight:600;margin-right:0.3rem;vertical-align:middle}
+    .tag.meta{background:rgba(24,119,242,0.15);border:1px solid rgba(24,119,242,0.25);color:#60a5fa}
+    .tag.google{background:rgba(234,67,53,0.12);border:1px solid rgba(234,67,53,0.2);color:#f87171}
+    .tag.both{background:rgba(79,110,247,0.12);border:1px solid rgba(79,110,247,0.25);color:#a5b4fc}
+    .footer-links{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:0.82rem;color:var(--muted);display:flex;gap:1.5rem;flex-wrap:wrap}
+    .footer-links a{color:var(--muted)}
+    .footer-links a:hover{color:#fff}
   </style>
 </head>
 <body>
 
 <header>
   <a class="logo" href="/">Sync<span>Metrics</span></a>
-  <a href="/" style="color:var(--muted);font-size:0.875rem;text-decoration:none;">← Back to home</a>
+  <nav><a href="/">← Back to home</a></nav>
 </header>
 
 <div class="container">
   <h1>Privacy Policy</h1>
-  <p class="updated">Last updated: April 20, 2025</p>
+  <p class="meta">Effective date: April 20, 2025 &nbsp;·&nbsp; SyncMetrics (syncmetrics.io)</p>
 
-  <p>SyncMetrics ("we", "us", or "our") operates syncmetrics.io. This policy explains what data we collect, how we use it, and your rights.</p>
+  <p>SyncMetrics connects your advertising accounts — Meta Ads and Google Ads — to AI tools (Claude via MCP) and reporting tools (Looker Studio), so you can analyse performance data in plain language. This policy explains what data we access, how we protect it, and your rights.</p>
 
-  <h2>1. What We Collect</h2>
-  <p>When you use SyncMetrics, we collect:</p>
+  <h2>1. Information We Collect</h2>
+
+  <h3>Account Information</h3>
+  <p>When you create an account we collect your <strong>email address</strong> and a <strong>hashed password</strong>. We never store your password in plain text.</p>
+
+  <h3>Ad Platform Tokens <span class="tag both">Meta &amp; Google</span></h3>
+  <p>When you connect an ad account, we store the OAuth access token issued by that platform. All tokens are encrypted at rest using AES-256 (Fernet). We never store your platform password.</p>
+
+  <h3>Ad Performance Data <span class="tag both">Meta &amp; Google</span></h3>
+  <p>We fetch campaign performance data (spend, impressions, clicks, CTR, CPC, CPM, ROAS, etc.) on your behalf when you request it. <strong>We do not permanently store this data.</strong> It is fetched live from the platform API and returned directly to you or your connected tool (Claude, Looker Studio). Nothing is cached or retained after the response is delivered.</p>
+
+  <h3>Usage &amp; Technical Logs</h3>
+  <p>Standard server access logs (IP address, endpoint called, HTTP status, timestamp) are retained for up to 30 days for security and debugging. These are not shared with third parties.</p>
+
+  <h2>2. Permissions We Request</h2>
+
+  <h3>Meta Ads <span class="tag meta">Meta</span></h3>
   <ul>
-    <li><strong>Account information</strong> — your email address and encrypted password (via Supabase Auth)</li>
-    <li><strong>Ad platform tokens</strong> — OAuth access tokens from Meta Ads, encrypted at rest using AES-256. We never store your Meta password.</li>
-    <li><strong>Ad data</strong> — campaign names, spend, impressions, clicks, and other performance metrics fetched on your behalf from Meta's API. We do not permanently store this data; it is fetched in real time and returned directly to you.</li>
-    <li><strong>Usage logs</strong> — standard server access logs (IP address, endpoint, timestamp) retained for up to 30 days for security and debugging purposes.</li>
+    <li><strong>ads_read</strong> — read your ad account campaign performance data (spend, impressions, clicks, etc.)</li>
+    <li><strong>pages_show_list</strong> — list the Facebook Pages associated with your account</li>
+  </ul>
+  <p>We request only the minimum permissions needed. We do not request permission to create, edit, or delete ads, or to post on your behalf.</p>
+
+  <h3>Google Ads <span class="tag google">Google</span></h3>
+  <ul>
+    <li><strong>Google Ads read-only</strong> — read campaign, ad group, keyword, and performance data from your Google Ads account</li>
   </ul>
 
-  <h2>2. How We Use Your Data</h2>
+  <div class="highlight">
+    <p><strong>Google API Services disclosure:</strong> SyncMetrics's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank">Google API Services User Data Policy</a>, including the Limited Use requirements. We do not sell, share, or transfer Google user data to third parties. Google user data is used solely to provide the SyncMetrics service to you and is never used for advertising, AI training, or any secondary purpose.</p>
+  </div>
+
+  <h2>3. How We Use Your Data</h2>
   <ul>
     <li>To authenticate you and manage your account</li>
-    <li>To connect to Meta Ads on your behalf and retrieve your ad performance data</li>
-    <li>To display your data in Claude (via MCP) and Looker Studio (via our connector)</li>
-    <li>To send transactional emails (e.g. account confirmation)</li>
+    <li>To connect to Meta Ads and Google Ads on your behalf using the permissions you granted</li>
+    <li>To fetch and display your ad performance data in Claude (via MCP) and Looker Studio (via our connector)</li>
+    <li>To send transactional emails (account confirmation, password reset)</li>
+    <li>To investigate security incidents and maintain service reliability</li>
   </ul>
-  <p>We do not sell your data. We do not use your ad data for advertising or profiling.</p>
-
-  <h2>3. Meta Ads Data</h2>
-  <p>SyncMetrics connects to Meta's Marketing API using permissions you explicitly grant. We request only the permissions needed:</p>
-  <ul>
-    <li><strong>ads_read</strong> — to read your ad account performance data</li>
-    <li><strong>pages_show_list</strong> — to list your Facebook Pages</li>
-  </ul>
-  <p>Your Meta access token is stored encrypted (AES-256 / Fernet). You can revoke our access at any time from your <a href="https://www.facebook.com/settings?tab=business_tools" target="_blank">Facebook App Settings</a> or by disconnecting from your SyncMetrics dashboard.</p>
+  <p><strong>We do not:</strong> sell your data, use your ad data for advertising or profiling, share it with other users, or use it to train AI models.</p>
 
   <h2>4. Data Sharing</h2>
-  <p>We share data only with:</p>
+  <p>We share data only with the following sub-processors, solely to deliver the service:</p>
   <ul>
-    <li><strong>Supabase</strong> — database and authentication provider (data stored in their EU/US infrastructure)</li>
-    <li><strong>Meta (Facebook)</strong> — we call Meta's API on your behalf using your token</li>
-    <li><strong>Render</strong> — our server hosting provider</li>
+    <li><strong>Supabase</strong> — database and authentication (data stored encrypted in their infrastructure)</li>
+    <li><strong>Render</strong> — server hosting (processes data to serve API requests)</li>
+    <li><strong>Meta (Facebook)</strong> — we call Meta's Marketing API on your behalf using your access token</li>
+    <li><strong>Google</strong> — we call Google Ads API on your behalf using your access token</li>
   </ul>
-  <p>We do not share your data with any other third parties.</p>
+  <p>We do not share your data with any other third parties. We do not sell data. We do not disclose data unless required by law.</p>
 
   <h2>5. Data Retention</h2>
   <ul>
-    <li>Your account and encrypted tokens are kept until you delete your account</li>
-    <li>Ad performance data is not stored — it is fetched live each time you request it</li>
-    <li>Server logs are retained for up to 30 days</li>
+    <li><strong>Account &amp; tokens</strong> — retained until you delete your account or disconnect the platform</li>
+    <li><strong>Ad performance data</strong> — not stored; fetched live on each request</li>
+    <li><strong>Server logs</strong> — retained for up to 30 days, then automatically deleted</li>
+    <li><strong>Looker Studio auth codes</strong> — single-use codes deleted immediately after exchange; expire after 5 minutes if unused</li>
   </ul>
 
   <h2>6. Data Deletion</h2>
   <p>You can delete your data at any time:</p>
   <ul>
-    <li><strong>Disconnect Meta</strong> — click "Disconnect" on your <a href="/dashboard">dashboard</a> to delete your Meta token immediately</li>
-    <li><strong>Delete account</strong> — email us at <a href="mailto:support@syncmetrics.io">support@syncmetrics.io</a> to have all your data permanently deleted</li>
-    <li><strong>Via Facebook</strong> — removing SyncMetrics from your <a href="https://www.facebook.com/settings?tab=business_tools" target="_blank">Facebook App Settings</a> triggers automatic deletion of your Meta token from our systems</li>
+    <li><strong>Disconnect a platform</strong> — click "Disconnect" on your <a href="/dashboard">dashboard</a>. Your access token is deleted immediately from our systems.</li>
+    <li><strong>Delete your account</strong> — email <a href="mailto:support@syncmetrics.io">support@syncmetrics.io</a>. All your data will be permanently deleted within 7 days.</li>
+    <li><strong>Via Meta</strong> — removing SyncMetrics from your <a href="https://www.facebook.com/settings?tab=business_tools" target="_blank">Facebook App Settings</a> triggers our data deletion callback and automatically deletes your Meta token.</li>
+    <li><strong>Via Google</strong> — revoking access from your <a href="https://myaccount.google.com/permissions" target="_blank">Google Account Permissions</a> page. Email us to confirm full deletion.</li>
   </ul>
 
   <h2>7. Security</h2>
-  <p>We protect your data using:</p>
   <ul>
-    <li>AES-256 encryption for all stored access tokens</li>
-    <li>HTTPS for all data in transit</li>
-    <li>Supabase Row Level Security to prevent cross-user data access</li>
-    <li>No permanent storage of ad performance data</li>
+    <li>All access tokens encrypted at rest with AES-256 (Fernet)</li>
+    <li>All data transmitted over HTTPS/TLS</li>
+    <li>Database Row Level Security (RLS) prevents any cross-user data access</li>
+    <li>Ad performance data is never persisted — no risk of data breach for your campaign data</li>
+    <li>OAuth state parameters and auth codes verified to prevent CSRF attacks</li>
   </ul>
 
-  <h2>8. Your Rights</h2>
-  <p>You have the right to access, correct, or delete your personal data at any time. Contact us at <a href="mailto:support@syncmetrics.io">support@syncmetrics.io</a>.</p>
+  <h2>8. Cookies</h2>
+  <p>We use only essential session cookies required for authentication. We do not use advertising cookies, tracking pixels, or third-party analytics cookies.</p>
 
-  <h2>9. Cookies</h2>
-  <p>We use only essential session cookies required for authentication. We do not use advertising or tracking cookies.</p>
+  <h2>9. Children's Privacy</h2>
+  <p>SyncMetrics is not directed at children under 16. We do not knowingly collect personal data from children.</p>
 
-  <h2>10. Changes</h2>
-  <p>We may update this policy. We will notify you by updating the "Last updated" date above. Continued use of the service constitutes acceptance of the updated policy.</p>
+  <h2>10. Your Rights</h2>
+  <p>You have the right to:</p>
+  <ul>
+    <li><strong>Access</strong> — request a copy of the personal data we hold about you</li>
+    <li><strong>Correction</strong> — request correction of inaccurate data</li>
+    <li><strong>Deletion</strong> — request deletion of your data (see Section 6)</li>
+    <li><strong>Portability</strong> — request your data in a machine-readable format</li>
+    <li><strong>Withdraw consent</strong> — disconnect any platform at any time from your dashboard</li>
+  </ul>
+  <p>To exercise these rights, email <a href="mailto:support@syncmetrics.io">support@syncmetrics.io</a>.</p>
 
-  <h2>11. Contact</h2>
-  <p>Questions about this policy? Email us at <a href="mailto:support@syncmetrics.io">support@syncmetrics.io</a>.</p>
+  <h2>11. Changes to This Policy</h2>
+  <p>We may update this policy. We will notify you by updating the "Effective date" above and, for material changes, by email. Continued use of the service after changes constitutes acceptance.</p>
 
-  <div class="divider"></div>
-  <p style="font-size:0.82rem;color:var(--muted)">SyncMetrics · syncmetrics.io · <a href="/terms">Terms of Service</a></p>
+  <h2>12. Contact</h2>
+  <p>Questions or concerns about this policy:<br>
+  📧 <a href="mailto:support@syncmetrics.io">support@syncmetrics.io</a><br>
+  🌐 <a href="https://syncmetrics.io">syncmetrics.io</a></p>
+
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/terms">Terms of Service</a>
+    <a href="/dashboard">Dashboard</a>
+    <span>© 2025 SyncMetrics</span>
+  </div>
 </div>
 
 </body>
