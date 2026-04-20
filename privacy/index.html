@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Privacy Policy — SyncMetrics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#05060f;--surface:#0d0f1e;--card:#111326;--border:rgba(255,255,255,0.07);--accent:#4f6ef7;--text:#e8eaf6;--muted:#7b82a8}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+    header{background:var(--surface);border-bottom:1px solid var(--border);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;text-decoration:none}
+    .logo span{color:var(--accent)}
+    .container{max-width:780px;margin:0 auto;padding:3rem 2rem}
+    h1{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;margin-bottom:0.5rem}
+    .updated{color:var(--muted);font-size:0.875rem;margin-bottom:3rem}
+    h2{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;margin:2rem 0 0.75rem}
+    p{color:var(--muted);margin-bottom:1rem;font-size:0.95rem}
+    ul{color:var(--muted);padding-left:1.5rem;margin-bottom:1rem;font-size:0.95rem}
+    li{margin-bottom:0.4rem}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .divider{height:1px;background:var(--border);margin:2rem 0}
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="/">Sync<span>Metrics</span></a>
+  <a href="/" style="color:var(--muted);font-size:0.875rem;text-decoration:none;">← Back to home</a>
+</header>
+
+<div class="container">
+  <h1>Privacy Policy</h1>
+  <p class="updated">Last updated: April 20, 2025</p>
+
+  <p>SyncMetrics ("we", "us", or "our") operates syncmetrics.io. This policy explains what data we collect, how we use it, and your rights.</p>
+
+  <h2>1. What We Collect</h2>
+  <p>When you use SyncMetrics, we collect:</p>
+  <ul>
+    <li><strong>Account information</strong> — your email address and encrypted password (via Supabase Auth)</li>
+    <li><strong>Ad platform tokens</strong> — OAuth access tokens from Meta Ads, encrypted at rest using AES-256. We never store your Meta password.</li>
+    <li><strong>Ad data</strong> — campaign names, spend, impressions, clicks, and other performance metrics fetched on your behalf from Meta's API. We do not permanently store this data; it is fetched in real time and returned directly to you.</li>
+    <li><strong>Usage logs</strong> — standard server access logs (IP address, endpoint, timestamp) retained for up to 30 days for security and debugging purposes.</li>
+  </ul>
+
+  <h2>2. How We Use Your Data</h2>
+  <ul>
+    <li>To authenticate you and manage your account</li>
+    <li>To connect to Meta Ads on your behalf and retrieve your ad performance data</li>
+    <li>To display your data in Claude (via MCP) and Looker Studio (via our connector)</li>
+    <li>To send transactional emails (e.g. account confirmation)</li>
+  </ul>
+  <p>We do not sell your data. We do not use your ad data for advertising or profiling.</p>
+
+  <h2>3. Meta Ads Data</h2>
+  <p>SyncMetrics connects to Meta's Marketing API using permissions you explicitly grant. We request only the permissions needed:</p>
+  <ul>
+    <li><strong>ads_read</strong> — to read your ad account performance data</li>
+    <li><strong>pages_show_list</strong> — to list your Facebook Pages</li>
+  </ul>
+  <p>Your Meta access token is stored encrypted (AES-256 / Fernet). You can revoke our access at any time from your <a href="https://www.facebook.com/settings?tab=business_tools" target="_blank">Facebook App Settings</a> or by disconnecting from your SyncMetrics dashboard.</p>
+
+  <h2>4. Data Sharing</h2>
+  <p>We share data only with:</p>
+  <ul>
+    <li><strong>Supabase</strong> — database and authentication provider (data stored in their EU/US infrastructure)</li>
+    <li><strong>Meta (Facebook)</strong> — we call Meta's API on your behalf using your token</li>
+    <li><strong>Render</strong> — our server hosting provider</li>
+  </ul>
+  <p>We do not share your data with any other third parties.</p>
+
+  <h2>5. Data Retention</h2>
+  <ul>
+    <li>Your account and encrypted tokens are kept until you delete your account</li>
+    <li>Ad performance data is not stored — it is fetched live each time you request it</li>
+    <li>Server logs are retained for up to 30 days</li>
+  </ul>
+
+  <h2>6. Data Deletion</h2>
+  <p>You can delete your data at any time:</p>
+  <ul>
+    <li><strong>Disconnect Meta</strong> — click "Disconnect" on your <a href="/dashboard">dashboard</a> to delete your Meta token immediately</li>
+    <li><strong>Delete account</strong> — email us at <a href="mailto:support@syncmetrics.io">support@syncmetrics.io</a> to have all your data permanently deleted</li>
+    <li><strong>Via Facebook</strong> — removing SyncMetrics from your <a href="https://www.facebook.com/settings?tab=business_tools" target="_blank">Facebook App Settings</a> triggers automatic deletion of your Meta token from our systems</li>
+  </ul>
+
+  <h2>7. Security</h2>
+  <p>We protect your data using:</p>
+  <ul>
+    <li>AES-256 encryption for all stored access tokens</li>
+    <li>HTTPS for all data in transit</li>
+    <li>Supabase Row Level Security to prevent cross-user data access</li>
+    <li>No permanent storage of ad performance data</li>
+  </ul>
+
+  <h2>8. Your Rights</h2>
+  <p>You have the right to access, correct, or delete your personal data at any time. Contact us at <a href="mailto:support@syncmetrics.io">support@syncmetrics.io</a>.</p>
+
+  <h2>9. Cookies</h2>
+  <p>We use only essential session cookies required for authentication. We do not use advertising or tracking cookies.</p>
+
+  <h2>10. Changes</h2>
+  <p>We may update this policy. We will notify you by updating the "Last updated" date above. Continued use of the service constitutes acceptance of the updated policy.</p>
+
+  <h2>11. Contact</h2>
+  <p>Questions about this policy? Email us at <a href="mailto:support@syncmetrics.io">support@syncmetrics.io</a>.</p>
+
+  <div class="divider"></div>
+  <p style="font-size:0.82rem;color:var(--muted)">SyncMetrics · syncmetrics.io · <a href="/terms">Terms of Service</a></p>
+</div>
+
+</body>
+</html>
