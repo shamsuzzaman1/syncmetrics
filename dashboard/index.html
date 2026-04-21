@@ -474,71 +474,54 @@
       color: #a78bfa;
     }
 
-    .accounts-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
+    .account-select-wrap {
+      position: relative;
       margin-bottom: 1.5rem;
     }
 
-    .account-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.85rem 1rem;
+    .account-select-wrap select {
+      width: 100%;
+      padding: 0.85rem 2.5rem 0.85rem 1rem;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
       cursor: pointer;
-      transition: all 0.2s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color 0.2s;
     }
 
-    .account-row:hover { border-color: rgba(79,110,247,0.3); }
+    .account-select-wrap select:focus { border-color: var(--accent); }
 
-    .account-row.selected {
-      border-color: var(--accent);
-      background: rgba(79,110,247,0.07);
+    .account-select-wrap select option {
+      background: var(--card);
+      color: var(--white);
     }
 
-    .account-row-left {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .account-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      border: 2px solid var(--border);
-      flex-shrink: 0;
-      transition: all 0.2s;
-    }
-
-    .account-row.selected .account-dot {
-      background: var(--accent);
-      border-color: var(--accent);
-    }
-
-    .account-name {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    .account-currency {
-      font-size: 0.75rem;
+    .account-select-arrow {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
       color: var(--muted);
+      font-size: 0.75rem;
     }
 
-    .account-selected-badge {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--success);
+    .account-selected-info {
       display: none;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--success);
     }
 
-    .account-row.selected .account-selected-badge { display: block; }
+    .account-selected-info.show { display: flex; }
 
     /* ── PLAN CARDS ── */
     .plan-grid {
@@ -977,8 +960,14 @@
           <p style="font-size:0.83rem;color:var(--muted);margin-bottom:1rem;">
             Select which Meta Ads account to use with Looker Studio and Claude. Free plan allows 1 account.
           </p>
-          <div class="accounts-list" id="accounts-list">
-            <div style="color:var(--muted);font-size:0.85rem;padding:1rem;">Loading accounts…</div>
+          <div class="account-select-wrap">
+            <select id="accounts-select" onchange="onAccountSelectChange(this)">
+              <option value="">Loading accounts…</option>
+            </select>
+            <span class="account-select-arrow">▼</span>
+          </div>
+          <div class="account-selected-info" id="account-selected-info">
+            <span>✓</span><span id="account-selected-name"></span> is active
           </div>
 
           <!-- PLAN CARDS -->
@@ -1330,8 +1319,7 @@
   // ── LOAD ACCOUNTS + SETTINGS ──
   async function loadAccountSection() {
     document.getElementById('account-section').style.display = 'block';
-    const list = document.getElementById('accounts-list');
-    list.innerHTML = '<div style="color:var(--muted);font-size:0.85rem;padding:1rem;">Loading accounts…</div>';
+    document.getElementById('accounts-select').innerHTML = '<option value="">Loading accounts…</option>';
 
     try {
       // Fetch all accounts + current settings in parallel
@@ -1365,41 +1353,49 @@
         document.querySelector('#plan-pro .btn-plan').textContent = 'Current plan';
       }
 
+      const select = document.getElementById('accounts-select');
+      select.innerHTML = '<option value="">— Select an ad account —</option>';
+
       if (accounts.length === 0) {
-        list.innerHTML = '<div style="color:var(--muted);font-size:0.85rem;padding:1rem;">No active ad accounts found.</div>';
+        select.innerHTML = '<option value="">No active accounts found</option>';
         return;
       }
 
-      list.innerHTML = '';
       accounts.forEach(account => {
-        const cleanId  = account.id.replace('act_', '');
-        const isSelected = cleanId === selectedId;
-        const row = document.createElement('div');
-        row.className = `account-row${isSelected ? ' selected' : ''}`;
-        row.innerHTML = `
-          <div class="account-row-left">
-            <div class="account-dot"></div>
-            <div>
-              <div class="account-name">${account.name}</div>
-              <div class="account-currency">${account.currency} · ID: ${cleanId}</div>
-            </div>
-          </div>
-          <div class="account-selected-badge">✓ Active</div>
-        `;
-        row.onclick = () => selectAccount(cleanId, account.name, plan, accounts);
-        list.appendChild(row);
+        const cleanId = account.id.replace('act_', '');
+        const opt = document.createElement('option');
+        opt.value = cleanId;
+        opt.dataset.name = account.name;
+        opt.dataset.currency = account.currency;
+        opt.textContent = `${account.name} (${account.currency})`;
+        if (cleanId === selectedId) opt.selected = true;
+        select.appendChild(opt);
       });
 
+      // Show selected info if one is already active
+      if (selectedId) {
+        const selectedAccount = accounts.find(a => a.id.replace('act_', '') === selectedId);
+        if (selectedAccount) showSelectedInfo(selectedAccount.name);
+      }
+
     } catch (e) {
-      list.innerHTML = '<div style="color:var(--danger);font-size:0.85rem;padding:1rem;">Failed to load accounts.</div>';
+      document.getElementById('accounts-select').innerHTML = '<option value="">Failed to load accounts</option>';
       console.error(e);
     }
   }
 
+  // ── DROPDOWN CHANGE ──
+  async function onAccountSelectChange(select) {
+    const accountId   = select.value;
+    const accountName = select.options[select.selectedIndex]?.dataset.name || '';
+    if (!accountId) return;
+    await selectAccount(accountId, accountName);
+  }
+
   // ── SELECT ACCOUNT ──
-  async function selectAccount(accountId, accountName, plan, accounts) {
+  async function selectAccount(accountId, accountName) {
     try {
-      const session = (await sb.auth.getSession()).data.session;
+      const { data: { session } } = await sb.auth.getSession();
       const res = await fetch(`${SERVER_URL}/api/user-settings`, {
         method: 'POST',
         headers: {
@@ -1414,12 +1410,7 @@
       });
 
       if (res.ok) {
-        // Update UI
-        document.querySelectorAll('.account-row').forEach(row => {
-          const nameEl = row.querySelector('.account-name');
-          const isThis = nameEl && nameEl.textContent === accountName;
-          row.classList.toggle('selected', isThis);
-        });
+        showSelectedInfo(accountName);
         showToast(`✓ "${accountName}" set as active account`, 'success');
       } else {
         showToast('Failed to save selection. Try again.', 'error');
@@ -1427,6 +1418,11 @@
     } catch (e) {
       showToast('Error saving account selection.', 'error');
     }
+  }
+
+  function showSelectedInfo(name) {
+    document.getElementById('account-selected-name').textContent = name;
+    document.getElementById('account-selected-info').classList.add('show');
   }
 
   // ── CONNECT META ──
