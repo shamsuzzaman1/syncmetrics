@@ -1024,14 +1024,19 @@
 
         <div class="info-card">
           <div class="info-card-title">🤖 Your personal MCP URL</div>
-          <p>This URL is unique to your account. Anyone with it can query your ad data — keep it private.</p>
+          <p>This URL is unique to your account. Anyone with it can query your ad data — keep it private. If compromised, regenerate it below.</p>
           <div class="url-row">
             <div class="url-box" id="mcp-url">Loading…</div>
             <button class="btn-copy" onclick="copyText('mcp-url', this)">Copy</button>
           </div>
-          <div class="transport-badges">
-            <span class="badge sse">SSE — Claude Code</span>
-            <span class="badge http">Streamable HTTP — Claude.ai web</span>
+          <div class="transport-badges" style="justify-content:space-between;align-items:center;">
+            <div style="display:flex;gap:0.5rem;">
+              <span class="badge sse">SSE — Claude Code</span>
+              <span class="badge http">Streamable HTTP — Claude.ai web</span>
+            </div>
+            <button onclick="regenerateMcpSecret(this)" style="background:transparent;border:1px solid rgba(239,68,68,0.3);color:var(--danger);font-family:'DM Sans',sans-serif;font-size:0.75rem;padding:0.3rem 0.75rem;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.1)'" onmouseout="this.style.background='transparent'">
+              🔄 Regenerate
+            </button>
           </div>
         </div>
 
@@ -1250,10 +1255,50 @@
     const email = currentUser.email;
     document.getElementById('user-email-display').textContent = email;
     document.getElementById('user-avatar').textContent = email[0].toUpperCase();
-    document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${currentUser.id}`;
 
-    await checkConnections();
+    await Promise.all([checkConnections(), loadMcpUrl()]);
     checkOAuthReturn();
+  }
+
+  // ── LOAD MCP URL ──
+  async function loadMcpUrl() {
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      const res = await fetch(`${SERVER_URL}/api/mcp-secret`, {
+        headers: { 'Authorization': `Bearer ${session.access_token}` }
+      });
+      if (res.ok) {
+        const { mcp_secret } = await res.json();
+        document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${mcp_secret}`;
+      } else {
+        document.getElementById('mcp-url').textContent = 'Connect Meta Ads first to get your URL';
+      }
+    } catch (e) {
+      document.getElementById('mcp-url').textContent = 'Failed to load URL';
+    }
+  }
+
+  // ── REGENERATE MCP SECRET ──
+  async function regenerateMcpSecret(btn) {
+    if (!confirm('This will invalidate your current MCP URL. Any Claude integrations using the old URL will stop working. Continue?')) return;
+    btn.textContent = '⏳ Regenerating…';
+    btn.disabled = true;
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      const res = await fetch(`${SERVER_URL}/api/mcp-secret/regenerate`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${session.access_token}` }
+      });
+      if (res.ok) {
+        const { mcp_secret } = await res.json();
+        document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${mcp_secret}`;
+        showToast('✓ MCP URL regenerated. Update your Claude settings.', 'success');
+      }
+    } catch (e) {
+      showToast('Failed to regenerate. Try again.', 'error');
+    }
+    btn.textContent = '🔄 Regenerate';
+    btn.disabled = false;
   }
 
   // ── TAB NAVIGATION ──
