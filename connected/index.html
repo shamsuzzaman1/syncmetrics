@@ -6,97 +6,37 @@
   <title>Connected — SyncMetrics</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-                   "Helvetica Neue", system-ui, sans-serif;
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      padding: 2rem; background: #04040e; overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", system-ui, sans-serif;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 2rem; background: #f0f2ff; overflow: hidden;
     }
-
     body::before {
       content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
-        radial-gradient(ellipse 70% 55% at 20% 15%, rgba(74,222,128,0.18) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 85%, rgba(99,102,241,0.18) 0%, transparent 60%),
-        linear-gradient(160deg, #040e08 0%, #04040e 100%);
+        radial-gradient(ellipse 70% 55% at 15% 10%, rgba(134,239,172,0.45) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 85% 90%, rgba(165,180,252,0.40) 0%, transparent 55%),
+        linear-gradient(160deg, #ecfdf5 0%, #eef0ff 100%);
     }
-
     .card {
-      position: relative; z-index: 1;
-      max-width: 460px; width: 100%;
-      padding: 2.75rem 2.25rem;
-      border-radius: 28px;
-      background: rgba(255,255,255,0.055);
-      -webkit-backdrop-filter: blur(32px) saturate(180%);
-      backdrop-filter: blur(32px) saturate(180%);
-      border: 1px solid rgba(255,255,255,0.11);
-      box-shadow: 0 8px 40px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.08) inset;
-      text-align: center;
+      position: relative; z-index: 1; max-width: 460px; width: 100%;
+      padding: 2.75rem 2.25rem; border-radius: 28px;
+      background: rgba(255,255,255,0.68);
+      -webkit-backdrop-filter: blur(28px) saturate(180%); backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.9); text-align: center;
+      box-shadow: 0 12px 48px rgba(22,163,74,0.1), 0 2px 8px rgba(0,0,0,0.05), 0 1px 0 rgba(255,255,255,0.95) inset;
     }
-
-    .logo {
-      font-size: 1rem; font-weight: 700;
-      color: #fff; margin-bottom: 2rem; letter-spacing: -0.3px;
-    }
-    .logo span { color: #a5b4fc; }
-
-    .icon-wrap {
-      width: 72px; height: 72px;
-      background: rgba(74,222,128,0.1);
-      border: 1px solid rgba(74,222,128,0.25);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; margin: 0 auto 1.5rem;
-      box-shadow: 0 0 28px rgba(74,222,128,0.2);
-    }
-
-    h1 {
-      font-size: 1.55rem; font-weight: 700;
-      color: #fff; margin-bottom: 0.65rem;
-      letter-spacing: -0.5px;
-    }
-
-    p {
-      color: rgba(255,255,255,0.45); font-size: 0.9rem;
-      line-height: 1.6; margin-bottom: 1.75rem;
-    }
-
-    .steps-box {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 16px; padding: 1.25rem 1.5rem;
-      text-align: left; margin-bottom: 1.75rem;
-    }
-
-    .steps-box .label {
-      font-size: 0.68rem; font-weight: 600;
-      color: rgba(255,255,255,0.35); letter-spacing: 1.5px;
-      text-transform: uppercase; margin-bottom: 0.85rem;
-    }
-
-    .step-item {
-      display: flex; align-items: center; gap: 0.6rem;
-      font-size: 0.85rem; color: rgba(255,255,255,0.8);
-      padding: 0.3rem 0;
-    }
-    .step-item::before {
-      content: '✓'; color: #4ade80;
-      font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
-    }
-
-    .btn {
-      display: inline-block; padding: 0.8rem 2rem;
-      border: none; border-radius: 13px;
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      color: #fff; font-family: inherit;
-      font-size: 0.9rem; font-weight: 600;
-      text-decoration: none; cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 20px rgba(99,102,241,0.4), 0 1px 0 rgba(255,255,255,0.15) inset;
-    }
-    .btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 28px rgba(99,102,241,0.5); }
+    .logo { font-size: 1rem; font-weight: 700; color: #1e1b4b; margin-bottom: 2rem; }
+    .logo span { color: #6366f1; }
+    .icon-wrap { width: 72px; height: 72px; background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.22); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1.5rem; }
+    h1 { font-size: 1.55rem; font-weight: 700; color: #1e1b4b; margin-bottom: 0.65rem; letter-spacing: -0.5px; }
+    p  { color: #6b7280; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.75rem; }
+    .steps-box { background: rgba(240,244,255,0.7); border: 1px solid rgba(99,102,241,0.12); border-radius: 16px; padding: 1.25rem 1.5rem; text-align: left; margin-bottom: 1.75rem; }
+    .steps-box .label { font-size: 0.68rem; font-weight: 700; color: #9ca3af; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.85rem; }
+    .step-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem; color: #374151; padding: 0.3rem 0; }
+    .step-item::before { content: '✓'; color: #16a34a; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
+    .btn { display: inline-block; padding: 0.8rem 2rem; border: none; border-radius: 13px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; font-family: inherit; font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 16px rgba(99,102,241,0.2); }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
     .btn:active { transform: scale(0.98); }
   </style>
 </head>

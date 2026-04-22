@@ -9,538 +9,229 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:          #04040e;
+      --bg:          #f0f2ff;
       --accent:      #6366f1;
       --accent2:     #8b5cf6;
-      --accent-text: #a5b4fc;
-      --glow:        rgba(99,102,241,0.35);
-      --text:        rgba(255,255,255,0.9);
-      --muted:       rgba(255,255,255,0.42);
+      --accent-text: #4f46e5;
+      --glow:        rgba(99,102,241,0.18);
+      --text:        #1e1b4b;
+      --muted:       #6b7280;
       --white:       #ffffff;
-      --success:     #4ade80;
-      --warning:     #fbbf24;
-      --danger:      #f87171;
-      --card-bg:     rgba(255,255,255,0.055);
-      --card-border: rgba(255,255,255,0.10);
+      --success:     #16a34a;
+      --warning:     #d97706;
+      --danger:      #dc2626;
+      --card-bg:     rgba(255,255,255,0.65);
+      --card-border: rgba(255,255,255,0.88);
       --blur:        blur(28px) saturate(180%);
       --r-card:      18px;
       --r-btn:       12px;
       --r-input:     11px;
+      --shadow:      0 4px 24px rgba(99,102,241,0.08), 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-lg:   0 12px 48px rgba(99,102,241,0.12), 0 2px 8px rgba(0,0,0,0.06);
       --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
               "Helvetica Neue", system-ui, sans-serif;
     }
 
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
 
     body::before {
       content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
-        radial-gradient(ellipse 70% 50% at 10%  5%,  rgba(99,102,241,0.16) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 90% 90%,  rgba(139,92,246,0.14) 0%, transparent 60%),
-        linear-gradient(160deg, #060616 0%, #04040e 100%);
+        radial-gradient(ellipse 70% 55% at 10%  0%,  rgba(165,180,252,0.45) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 100%, rgba(196,181,253,0.40) 0%, transparent 60%),
+        linear-gradient(160deg, #eef0ff 0%, #f5f3ff 50%, #f0f2ff 100%);
     }
 
     /* ── AUTH ── */
     #auth-screen {
       position: relative; z-index: 1;
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      padding: 2rem;
+      min-height: 100vh; display: flex;
+      align-items: center; justify-content: center; padding: 2rem;
     }
-
     .auth-box {
       background: var(--card-bg);
       -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
       border: 1px solid var(--card-border);
       border-radius: 28px; padding: 2.5rem 2.25rem;
       width: 100%; max-width: 420px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.08) inset;
+      box-shadow: var(--shadow-lg), 0 1px 0 rgba(255,255,255,0.95) inset;
     }
-
-    .auth-logo {
-      font-size: 1.4rem; font-weight: 700;
-      color: var(--white); margin-bottom: 1.75rem;
-      text-align: center; letter-spacing: -0.5px;
-    }
-    .auth-logo span { color: var(--accent-text); }
+    .auth-logo { font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 1.75rem; text-align: center; letter-spacing: -0.5px; }
+    .auth-logo span { color: var(--accent); }
 
     .auth-tabs {
-      display: flex;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--card-border);
-      border-radius: 10px; padding: 3px;
-      margin-bottom: 1.4rem;
+      display: flex; background: rgba(99,102,241,0.06);
+      border: 1px solid rgba(99,102,241,0.12);
+      border-radius: 10px; padding: 3px; margin-bottom: 1.4rem;
     }
-    .auth-tab {
-      flex: 1; padding: 0.5rem;
-      border: none; border-radius: 8px;
-      background: transparent; color: var(--muted);
-      font-family: var(--font); font-size: 0.875rem;
-      font-weight: 500; cursor: pointer; transition: all 0.2s;
-    }
-    .auth-tab.active {
-      background: rgba(255,255,255,0.08);
-      color: var(--white);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    }
+    .auth-tab { flex: 1; padding: 0.5rem; border: none; border-radius: 8px; background: transparent; color: var(--muted); font-family: var(--font); font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .auth-tab.active { background: var(--white); color: var(--text); box-shadow: 0 1px 6px rgba(99,102,241,0.12); }
 
     .form-group { margin-bottom: 0.9rem; }
-    .form-group label {
-      display: block; font-size: 0.7rem; font-weight: 500;
-      color: var(--muted); margin-bottom: 0.35rem;
-      letter-spacing: 0.6px; text-transform: uppercase;
-    }
+    .form-group label { display: block; font-size: 0.7rem; font-weight: 600; color: var(--muted); margin-bottom: 0.35rem; letter-spacing: 0.6px; text-transform: uppercase; }
     .form-group input {
       width: 100%; padding: 0.75rem 1rem;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--card-border);
-      border-radius: var(--r-input);
-      color: var(--white); font-family: var(--font);
-      font-size: 0.9rem; outline: none;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: var(--r-input); color: var(--text);
+      font-family: var(--font); font-size: 0.9rem; outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
-      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
     }
-    .form-group input::placeholder { color: rgba(255,255,255,0.2); }
-    .form-group input:focus {
-      border-color: rgba(99,102,241,0.6);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.18);
-    }
+    .form-group input::placeholder { color: #9ca3af; }
+    .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,0.12); }
 
-    .btn-primary {
-      width: 100%; padding: 0.82rem;
-      border: none; border-radius: var(--r-btn);
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: var(--white); font-family: var(--font);
-      font-size: 0.95rem; font-weight: 600; cursor: pointer;
-      transition: all 0.2s; margin-top: 0.4rem;
-      box-shadow: 0 4px 20px var(--glow), 0 1px 0 rgba(255,255,255,0.15) inset;
-    }
-    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 6px 28px var(--glow); }
-    .btn-primary:active { transform: scale(0.98); opacity: 0.88; }
+    .btn-primary { width: 100%; padding: 0.82rem; border: none; border-radius: var(--r-btn); background: linear-gradient(135deg, var(--accent), var(--accent2)); color: var(--white); font-family: var(--font); font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 0.4rem; box-shadow: 0 4px 16px var(--glow); }
+    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(99,102,241,0.25); }
+    .btn-primary:active { transform: scale(0.98); }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    .btn-google {
-      width: 100%; padding: 0.8rem;
-      border: 1px solid var(--card-border);
-      border-radius: var(--r-btn);
-      background: rgba(255,255,255,0.05);
-      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-      color: var(--text); font-family: var(--font);
-      font-size: 0.9rem; font-weight: 500; cursor: pointer;
-      transition: all 0.2s;
-      display: flex; align-items: center;
-      justify-content: center; gap: 0.6rem; margin-bottom: 1.1rem;
-    }
-    .btn-google:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); }
+    .btn-google { width: 100%; padding: 0.8rem; border: 1px solid rgba(99,102,241,0.15); border-radius: var(--r-btn); background: rgba(255,255,255,0.85); color: var(--text); font-family: var(--font); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-bottom: 1.1rem; }
+    .btn-google:hover { background: var(--white); border-color: rgba(99,102,241,0.3); box-shadow: var(--shadow); }
 
-    .auth-divider {
-      display: flex; align-items: center;
-      gap: 0.75rem; margin-bottom: 1.1rem;
-    }
-    .auth-divider::before, .auth-divider::after {
-      content: ''; flex: 1; height: 1px;
-      background: var(--card-border);
-    }
-    .auth-divider span { color: var(--muted); font-size: 0.75rem; white-space: nowrap; }
+    .auth-divider { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.1rem; }
+    .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: rgba(99,102,241,0.12); }
+    .auth-divider span { color: var(--muted); font-size: 0.75rem; }
 
-    .auth-message {
-      text-align: center; font-size: 0.82rem;
-      margin-top: 0.85rem; padding: 0.7rem;
-      border-radius: 10px; display: none;
-    }
-    .auth-message.error {
-      background: rgba(248,113,113,0.1);
-      border: 1px solid rgba(248,113,113,0.22);
-      color: #fca5a5; display: block;
-    }
-    .auth-message.success {
-      background: rgba(74,222,128,0.1);
-      border: 1px solid rgba(74,222,128,0.22);
-      color: #86efac; display: block;
-    }
+    .auth-message { text-align: center; font-size: 0.82rem; margin-top: 0.85rem; padding: 0.7rem; border-radius: 10px; display: none; }
+    .auth-message.error   { background: rgba(220,38,38,0.07);  border: 1px solid rgba(220,38,38,0.2);  color: #b91c1c; display: block; }
+    .auth-message.success { background: rgba(22,163,74,0.07);  border: 1px solid rgba(22,163,74,0.2);  color: #15803d; display: block; }
 
     /* ── LAYOUT ── */
     #dashboard-screen { display: none; position: relative; z-index: 1; }
-
     .layout { display: flex; min-height: 100vh; }
 
     /* ── SIDEBAR ── */
     .sidebar {
       width: 216px;
-      background: rgba(255,255,255,0.035);
+      background: rgba(255,255,255,0.60);
       -webkit-backdrop-filter: blur(24px) saturate(160%);
       backdrop-filter: blur(24px) saturate(160%);
-      border-right: 1px solid var(--card-border);
+      border-right: 1px solid rgba(255,255,255,0.9);
+      box-shadow: 1px 0 20px rgba(99,102,241,0.06);
       padding: 1.4rem;
       display: flex; flex-direction: column;
       position: fixed; top: 0; left: 0; bottom: 0;
     }
+    .sidebar-logo { font-size: 1.15rem; font-weight: 700; color: var(--text); letter-spacing: -0.4px; margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(99,102,241,0.1); }
+    .sidebar-logo span { color: var(--accent); }
 
-    .sidebar-logo {
-      font-size: 1.15rem; font-weight: 700;
-      color: var(--white); letter-spacing: -0.4px;
-      margin-bottom: 1.75rem; padding-bottom: 1.25rem;
-      border-bottom: 1px solid var(--card-border);
-    }
-    .sidebar-logo span { color: var(--accent-text); }
-
-    .nav-section-label {
-      font-size: 0.65rem; font-weight: 600;
-      color: rgba(255,255,255,0.28); letter-spacing: 1px;
-      text-transform: uppercase; margin: 1rem 0 0.4rem 0.7rem;
-    }
-
-    .nav-item {
-      display: flex; align-items: center; gap: 0.7rem;
-      padding: 0.55rem 0.8rem; border-radius: 10px;
-      color: var(--muted); font-size: 0.85rem; font-weight: 500;
-      cursor: pointer; transition: all 0.2s;
-      margin-bottom: 0.1rem; text-decoration: none;
-      border: none; background: transparent;
-      width: 100%; text-align: left;
-    }
-    .nav-item:hover {
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.8);
-    }
-    .nav-item.active {
-      background: rgba(99,102,241,0.14);
-      color: var(--accent-text);
-      border: 1px solid rgba(99,102,241,0.2);
-    }
+    .nav-section-label { font-size: 0.65rem; font-weight: 600; color: #9ca3af; letter-spacing: 1px; text-transform: uppercase; margin: 1rem 0 0.4rem 0.7rem; }
+    .nav-item { display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 0.8rem; border-radius: 10px; color: var(--muted); font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; margin-bottom: 0.1rem; text-decoration: none; border: none; background: transparent; width: 100%; text-align: left; }
+    .nav-item:hover { background: rgba(99,102,241,0.07); color: var(--text); }
+    .nav-item.active { background: rgba(99,102,241,0.1); color: var(--accent-text); border: 1px solid rgba(99,102,241,0.18); }
     .nav-icon { font-size: 0.95rem; width: 18px; text-align: center; flex-shrink: 0; }
 
-    .sidebar-bottom {
-      margin-top: auto;
-      border-top: 1px solid var(--card-border);
-      padding-top: 1rem;
-    }
+    .sidebar-bottom { margin-top: auto; border-top: 1px solid rgba(99,102,241,0.1); padding-top: 1rem; }
     .user-info { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem; }
-    .user-avatar {
-      width: 30px; height: 30px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; font-weight: 700; color: var(--white); flex-shrink: 0;
-    }
-    .user-email {
-      font-size: 0.73rem; color: var(--muted);
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .btn-logout {
-      width: 100%; padding: 0.45rem;
-      border: 1px solid var(--card-border);
-      border-radius: 8px; background: transparent;
-      color: var(--muted); font-family: var(--font);
-      font-size: 0.78rem; cursor: pointer; transition: all 0.2s;
-    }
-    .btn-logout:hover { border-color: rgba(248,113,113,0.4); color: var(--danger); }
+    .user-avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: var(--white); flex-shrink: 0; }
+    .user-email { font-size: 0.73rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .btn-logout { width: 100%; padding: 0.45rem; border: 1px solid rgba(99,102,241,0.15); border-radius: 8px; background: transparent; color: var(--muted); font-family: var(--font); font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
+    .btn-logout:hover { border-color: rgba(220,38,38,0.35); color: var(--danger); background: rgba(220,38,38,0.04); }
 
     /* ── MAIN ── */
-    .main {
-      margin-left: 216px; flex: 1;
-      padding: 2.25rem; max-width: calc(100vw - 216px);
-    }
-
+    .main { margin-left: 216px; flex: 1; padding: 2.25rem; max-width: calc(100vw - 216px); }
     .page-header { margin-bottom: 1.75rem; }
-    .page-title {
-      font-size: 1.4rem; font-weight: 700;
-      color: var(--white); letter-spacing: -0.5px;
-    }
+    .page-title { font-size: 1.4rem; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
     .page-sub { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
 
-    /* ── TABS ── */
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
     /* ── CONNECTION CARDS ── */
-    .connections-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-      gap: 1.1rem;
-    }
-
-    .connection-card {
-      background: var(--card-bg);
-      -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
-      border: 1px solid var(--card-border);
-      border-radius: var(--r-card); padding: 1.4rem;
-      transition: all 0.3s;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
-    }
-    .connection-card:hover {
-      border-color: rgba(99,102,241,0.25);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
-    }
-    .connection-header {
-      display: flex; align-items: center;
-      justify-content: space-between; margin-bottom: 0.9rem;
-    }
+    .connections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.1rem; }
+    .connection-card { background: var(--card-bg); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--card-border); border-radius: var(--r-card); padding: 1.4rem; transition: all 0.3s; box-shadow: var(--shadow); }
+    .connection-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .connection-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.9rem; }
     .connection-platform { display: flex; align-items: center; gap: 0.7rem; }
-    .platform-logo {
-      width: 38px; height: 38px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
-    }
-    .platform-logo.meta   { background: rgba(24,119,242,0.12); border: 1px solid rgba(24,119,242,0.2); }
-    .platform-logo.google { background: rgba(234,67,53,0.1);   border: 1px solid rgba(234,67,53,0.18); }
-    .platform-logo.ga     { background: rgba(251,188,4,0.1);   border: 1px solid rgba(251,188,4,0.18); }
-    .platform-name { font-size: 0.9rem; font-weight: 600; color: var(--white); }
+    .platform-logo { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .platform-logo.meta   { background: rgba(24,119,242,0.1);  border: 1px solid rgba(24,119,242,0.18); }
+    .platform-logo.google { background: rgba(234,67,53,0.08);  border: 1px solid rgba(234,67,53,0.15); }
+    .platform-logo.ga     { background: rgba(251,188,4,0.08);  border: 1px solid rgba(251,188,4,0.15); }
+    .platform-name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
     .platform-type { font-size: 0.73rem; color: var(--muted); }
 
-    .status-badge {
-      padding: 0.25rem 0.65rem;
-      border-radius: 100px; font-size: 0.7rem; font-weight: 600;
-    }
-    .status-badge.connected    { background: rgba(74,222,128,0.1);  border: 1px solid rgba(74,222,128,0.22);  color: var(--success); }
-    .status-badge.disconnected { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border);     color: var(--muted); }
-    .status-badge.coming-soon  { background: rgba(251,191,36,0.1);   border: 1px solid rgba(251,191,36,0.22); color: var(--warning); }
+    .status-badge { padding: 0.25rem 0.65rem; border-radius: 100px; font-size: 0.7rem; font-weight: 600; }
+    .status-badge.connected    { background: rgba(22,163,74,0.08);  border: 1px solid rgba(22,163,74,0.2);   color: var(--success); }
+    .status-badge.disconnected { background: rgba(107,114,128,0.08); border: 1px solid rgba(107,114,128,0.15); color: var(--muted); }
+    .status-badge.coming-soon  { background: rgba(217,119,6,0.08);  border: 1px solid rgba(217,119,6,0.2);   color: var(--warning); }
 
     .connection-desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.1rem; line-height: 1.55; }
-
-    .btn-connect {
-      width: 100%; padding: 0.6rem;
-      border: 1px solid var(--card-border);
-      border-radius: var(--r-btn);
-      background: rgba(255,255,255,0.04);
-      color: var(--text); font-family: var(--font);
-      font-size: 0.85rem; font-weight: 500; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-connect:hover:not(:disabled) {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-color: transparent; color: var(--white);
-      box-shadow: 0 4px 16px var(--glow);
-    }
-    .btn-connect.connected { border-color: rgba(248,113,113,0.3); color: var(--danger); }
-    .btn-connect.connected:hover { background: rgba(248,113,113,0.1); border-color: var(--danger); }
+    .btn-connect { width: 100%; padding: 0.6rem; border: 1px solid rgba(99,102,241,0.2); border-radius: var(--r-btn); background: rgba(255,255,255,0.7); color: var(--text); font-family: var(--font); font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .btn-connect:hover:not(:disabled) { background: linear-gradient(135deg, var(--accent), var(--accent2)); border-color: transparent; color: var(--white); box-shadow: 0 4px 14px var(--glow); }
+    .btn-connect.connected { border-color: rgba(220,38,38,0.25); color: var(--danger); background: rgba(220,38,38,0.04); }
+    .btn-connect.connected:hover { background: rgba(220,38,38,0.08); border-color: var(--danger); }
     .btn-connect:disabled { opacity: 0.35; cursor: not-allowed; }
 
     /* ── ACCOUNT SECTION ── */
-    .section-header {
-      display: flex; align-items: center;
-      justify-content: space-between; margin: 1.75rem 0 0.85rem;
-    }
-    .section-title-sm {
-      font-size: 0.95rem; font-weight: 600; color: var(--white);
-    }
-
-    .plan-badge {
-      padding: 0.22rem 0.65rem; border-radius: 100px;
-      font-size: 0.68rem; font-weight: 600;
-      background: rgba(99,102,241,0.12);
-      border: 1px solid rgba(99,102,241,0.25);
-      color: var(--accent-text);
-    }
-    .plan-badge.pro {
-      background: rgba(139,92,246,0.12);
-      border-color: rgba(139,92,246,0.25);
-      color: #c4b5fd;
-    }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin: 1.75rem 0 0.85rem; }
+    .section-title-sm { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+    .plan-badge { padding: 0.22rem 0.65rem; border-radius: 100px; font-size: 0.68rem; font-weight: 600; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); color: var(--accent-text); }
+    .plan-badge.pro { background: rgba(139,92,246,0.1); border-color: rgba(139,92,246,0.2); color: #7c3aed; }
 
     .account-select-wrap { position: relative; margin-bottom: 1.25rem; }
-    .account-select-wrap select {
-      width: 100%; padding: 0.8rem 2.5rem 0.8rem 1rem;
-      background: var(--card-bg);
-      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-      border: 1px solid var(--card-border);
-      border-radius: 12px; color: var(--white);
-      font-family: var(--font); font-size: 0.875rem;
-      cursor: pointer; outline: none;
-      appearance: none; -webkit-appearance: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .account-select-wrap select:focus {
-      border-color: rgba(99,102,241,0.5);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
-    }
-    .account-select-wrap select option { background: #0d0d1e; color: var(--white); }
-    .account-select-arrow {
-      position: absolute; right: 1rem; top: 50%;
-      transform: translateY(-50%); pointer-events: none;
-      color: var(--muted); font-size: 0.7rem;
-    }
-    .account-selected-info {
-      display: none; align-items: center; gap: 0.4rem;
-      margin-top: 0.5rem; font-size: 0.78rem; color: var(--success);
-    }
+    .account-select-wrap select { width: 100%; padding: 0.8rem 2.5rem 0.8rem 1rem; background: rgba(255,255,255,0.85); border: 1px solid rgba(99,102,241,0.15); border-radius: 12px; color: var(--text); font-family: var(--font); font-size: 0.875rem; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .account-select-wrap select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+    .account-select-wrap select option { background: var(--white); color: var(--text); }
+    .account-select-arrow { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--muted); font-size: 0.7rem; }
+    .account-selected-info { display: none; align-items: center; gap: 0.4rem; margin-top: 0.5rem; font-size: 0.78rem; color: var(--success); }
     .account-selected-info.show { display: flex; }
 
     /* ── PLAN CARDS ── */
     .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
     @media (max-width: 600px) { .plan-grid { grid-template-columns: 1fr; } }
-
-    .plan-card {
-      background: var(--card-bg);
-      -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
-      border: 1px solid var(--card-border);
-      border-radius: var(--r-card); padding: 1.4rem;
-      transition: all 0.2s;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-    .plan-card.current {
-      border-color: rgba(99,102,241,0.4);
-      background: rgba(99,102,241,0.07);
-    }
-    .plan-card-label {
-      font-size: 0.68rem; font-weight: 600;
-      letter-spacing: 1px; text-transform: uppercase;
-      color: var(--muted); margin-bottom: 0.45rem;
-    }
-    .plan-card.current .plan-card-label { color: var(--accent-text); }
-    .plan-card-price {
-      font-size: 1.55rem; font-weight: 700;
-      color: var(--white); margin-bottom: 0.2rem; letter-spacing: -0.5px;
-    }
+    .plan-card { background: var(--card-bg); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--card-border); border-radius: var(--r-card); padding: 1.4rem; box-shadow: var(--shadow); transition: all 0.2s; }
+    .plan-card.current { border-color: rgba(99,102,241,0.35); background: rgba(238,240,255,0.75); }
+    .plan-card-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 0.45rem; }
+    .plan-card.current .plan-card-label { color: var(--accent); }
+    .plan-card-price { font-size: 1.55rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; letter-spacing: -0.5px; }
     .plan-card-price span { font-size: 0.82rem; font-weight: 400; color: var(--muted); }
-    .plan-card-desc {
-      font-size: 0.78rem; color: var(--muted);
-      margin-bottom: 0.9rem; padding-bottom: 0.9rem;
-      border-bottom: 1px solid var(--card-border);
-    }
+    .plan-card-desc { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.9rem; padding-bottom: 0.9rem; border-bottom: 1px solid rgba(99,102,241,0.1); }
     .plan-features-list { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1.1rem; }
-    .plan-features-list li {
-      font-size: 0.8rem; color: var(--text);
-      display: flex; align-items: center; gap: 0.45rem;
-    }
-    .plan-features-list li::before {
-      content: '✓'; color: var(--accent-text);
-      font-weight: 700; font-size: 0.72rem;
-    }
-    .btn-plan {
-      width: 100%; padding: 0.55rem;
-      border-radius: 8px; font-family: var(--font);
-      font-size: 0.82rem; font-weight: 500; cursor: pointer;
-      transition: all 0.2s; text-align: center;
-      text-decoration: none; display: block;
-    }
-    .btn-plan.current {
-      border: 1px solid var(--card-border);
-      background: transparent; color: var(--muted); cursor: default;
-    }
-    .btn-plan.upgrade {
-      border: none;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: var(--white);
-      box-shadow: 0 3px 14px var(--glow);
-    }
+    .plan-features-list li { font-size: 0.8rem; color: var(--text); display: flex; align-items: center; gap: 0.45rem; }
+    .plan-features-list li::before { content: '✓'; color: var(--accent); font-weight: 700; font-size: 0.72rem; }
+    .btn-plan { width: 100%; padding: 0.55rem; border-radius: 8px; font-family: var(--font); font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.2s; text-align: center; text-decoration: none; display: block; }
+    .btn-plan.current { border: 1px solid rgba(99,102,241,0.15); background: transparent; color: var(--muted); cursor: default; }
+    .btn-plan.upgrade { border: none; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: var(--white); box-shadow: 0 3px 12px var(--glow); }
     .btn-plan.upgrade:hover { opacity: 0.9; transform: translateY(-1px); }
 
     /* ── INFO CARDS ── */
-    .info-card {
-      background: var(--card-bg);
-      -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
-      border: 1px solid var(--card-border);
-      border-radius: var(--r-card); padding: 1.6rem;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
-    }
-    .info-card-title {
-      font-size: 0.95rem; font-weight: 600;
-      color: var(--white); margin-bottom: 0.4rem;
-      display: flex; align-items: center; gap: 0.45rem;
-    }
-    .info-card p {
-      font-size: 0.83rem; color: var(--muted);
-      margin-bottom: 0.9rem; line-height: 1.55;
-    }
+    .info-card { background: var(--card-bg); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--card-border); border-radius: var(--r-card); padding: 1.6rem; margin-bottom: 1.25rem; box-shadow: var(--shadow); }
+    .info-card-title { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.45rem; }
+    .info-card p { font-size: 0.83rem; color: var(--muted); margin-bottom: 0.9rem; line-height: 1.55; }
 
     .url-row { display: flex; gap: 0.65rem; align-items: center; }
-    .url-box {
-      flex: 1; padding: 0.6rem 0.9rem;
-      background: rgba(0,0,0,0.3);
-      border: 1px solid var(--card-border);
-      border-radius: 8px; color: var(--accent-text);
-      font-size: 0.8rem; font-family: monospace;
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .btn-copy {
-      padding: 0.6rem 1.1rem;
-      border: 1px solid rgba(99,102,241,0.35);
-      border-radius: 8px;
-      background: rgba(99,102,241,0.1);
-      color: var(--accent-text); font-family: var(--font);
-      font-size: 0.82rem; font-weight: 500; cursor: pointer;
-      transition: all 0.2s; white-space: nowrap;
-    }
+    .url-box { flex: 1; padding: 0.6rem 0.9rem; background: rgba(238,240,255,0.8); border: 1px solid rgba(99,102,241,0.15); border-radius: 8px; color: var(--accent-text); font-size: 0.8rem; font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .btn-copy { padding: 0.6rem 1.1rem; border: 1px solid rgba(99,102,241,0.25); border-radius: 8px; background: rgba(99,102,241,0.08); color: var(--accent-text); font-family: var(--font); font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
     .btn-copy:hover { background: var(--accent); border-color: var(--accent); color: var(--white); }
 
     /* ── STEPS ── */
     .steps { display: flex; flex-direction: column; gap: 0.9rem; }
-    .step { display: flex; gap: 0.9rem; align-items: flex-start; }
-    .step-num {
-      width: 24px; height: 24px; border-radius: 50%;
-      background: rgba(99,102,241,0.14);
-      border: 1px solid rgba(99,102,241,0.3);
-      color: var(--accent-text);
-      font-size: 0.72rem; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; margin-top: 1px;
-    }
+    .step  { display: flex; gap: 0.9rem; align-items: flex-start; }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.25); color: var(--accent-text); font-size: 0.72rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
     .step-text { font-size: 0.85rem; color: var(--muted); line-height: 1.55; }
     .step-text strong { color: var(--text); }
 
-    code {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--card-border);
-      padding: 0.12rem 0.38rem; border-radius: 5px;
-      font-size: 0.78rem; color: var(--accent-text); font-family: monospace;
-    }
+    code { background: rgba(99,102,241,0.07); border: 1px solid rgba(99,102,241,0.15); padding: 0.12rem 0.38rem; border-radius: 5px; font-size: 0.78rem; color: var(--accent-text); font-family: monospace; }
 
-    .btn-cta {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      padding: 0.6rem 1.2rem; border-radius: 8px;
-      font-family: var(--font); font-size: 0.85rem; font-weight: 500;
-      text-decoration: none; cursor: pointer; transition: all 0.2s;
-      margin-top: 0.5rem;
-    }
-    .btn-cta.looker {
-      border: 1px solid rgba(251,191,36,0.35);
-      background: rgba(251,191,36,0.08); color: var(--warning);
-    }
-    .btn-cta.looker:hover { background: rgba(251,191,36,0.15); }
+    .btn-cta { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.2rem; border-radius: 8px; font-family: var(--font); font-size: 0.85rem; font-weight: 500; text-decoration: none; cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; }
+    .btn-cta.looker { border: 1px solid rgba(217,119,6,0.3); background: rgba(217,119,6,0.07); color: var(--warning); }
+    .btn-cta.looker:hover { background: rgba(217,119,6,0.12); }
 
-    /* ── TRANSPORT BADGES ── */
-    .transport-badges {
-      display: flex; gap: 0.45rem;
-      flex-wrap: wrap; margin-top: 0.65rem;
-    }
-    .badge {
-      padding: 0.22rem 0.6rem; border-radius: 6px;
-      font-size: 0.7rem; font-weight: 600;
-    }
-    .badge.sse  { background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); color: var(--accent-text); }
-    .badge.http { background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.25); color: #c4b5fd; }
+    .transport-badges { display: flex; gap: 0.45rem; flex-wrap: wrap; margin-top: 0.65rem; }
+    .badge { padding: 0.22rem 0.6rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; }
+    .badge.sse  { background: rgba(99,102,241,0.1);  border: 1px solid rgba(99,102,241,0.2);  color: var(--accent-text); }
+    .badge.http { background: rgba(139,92,246,0.1);  border: 1px solid rgba(139,92,246,0.2);  color: #7c3aed; }
 
-    /* ── DIVIDER ── */
-    .divider { height: 1px; background: var(--card-border); margin: 1.25rem 0; }
+    .divider { height: 1px; background: rgba(99,102,241,0.1); margin: 1.25rem 0; }
 
-    /* ── FIELD CHIPS ── */
-    .field-chip {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--card-border);
-      border-radius: 8px; padding: 0.55rem 0.8rem;
-      font-size: 0.8rem;
-    }
-    .field-chip .dim-label {
-      color: var(--muted); font-size: 0.65rem; display: block; margin-bottom: 1px;
-    }
+    .field-chip { background: rgba(238,240,255,0.8); border: 1px solid rgba(99,102,241,0.12); border-radius: 8px; padding: 0.55rem 0.8rem; font-size: 0.8rem; color: var(--text); }
+    .field-chip .dim-label { color: var(--muted); font-size: 0.65rem; display: block; margin-bottom: 1px; }
 
     /* ── TOAST ── */
-    .toast {
-      position: fixed; bottom: 1.75rem; right: 1.75rem;
-      padding: 0.8rem 1.4rem; border-radius: 12px;
-      font-size: 0.85rem; font-weight: 500; z-index: 999;
-      -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
-      transform: translateY(100px); opacity: 0; transition: all 0.3s;
-    }
+    .toast { position: fixed; bottom: 1.75rem; right: 1.75rem; padding: 0.8rem 1.4rem; border-radius: 12px; font-size: 0.85rem; font-weight: 500; z-index: 999; -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); transform: translateY(100px); opacity: 0; transition: all 0.3s; }
     .toast.show { transform: translateY(0); opacity: 1; }
-    .toast.success { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.28); color: #86efac; }
-    .toast.error   { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.28); color: #fca5a5; }
+    .toast.success { background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.25); color: #15803d; }
+    .toast.error   { background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.25); color: #b91c1c; }
 
     @media (max-width: 768px) {
       .sidebar { display: none; }
@@ -550,72 +241,41 @@
 </head>
 <body>
 
-<!-- ── AUTH SCREEN ── -->
 <div id="auth-screen">
   <div class="auth-box">
     <div class="auth-logo">Sync<span>Metrics</span></div>
-
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchAuthTab('login', this)">Log in</button>
       <button class="auth-tab" onclick="switchAuthTab('signup', this)">Sign up</button>
     </div>
-
     <button class="btn-google" onclick="handleGoogleLogin()">
       <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
       Continue with Google
     </button>
-
     <div class="auth-divider"><span>or</span></div>
-
     <div id="login-form">
-      <div class="form-group">
-        <label>Email address</label>
-        <input type="email" id="login-email" placeholder="you@example.com"/>
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="••••••••"/>
-      </div>
+      <div class="form-group"><label>Email address</label><input type="email" id="login-email" placeholder="you@example.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"/></div>
       <button class="btn-primary" onclick="handleLogin()">Log in →</button>
     </div>
-
     <div id="signup-form" style="display:none;">
-      <div class="form-group">
-        <label>Email address</label>
-        <input type="email" id="signup-email" placeholder="you@example.com"/>
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="signup-password" placeholder="Min 6 characters"/>
-      </div>
+      <div class="form-group"><label>Email address</label><input type="email" id="signup-email" placeholder="you@example.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" id="signup-password" placeholder="Min 6 characters"/></div>
       <button class="btn-primary" onclick="handleSignup()">Create account →</button>
     </div>
-
     <div id="auth-msg" class="auth-message"></div>
   </div>
 </div>
 
-<!-- ── DASHBOARD SCREEN ── -->
 <div id="dashboard-screen">
   <div class="layout">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="sidebar-logo">Sync<span>Metrics</span></div>
-
       <div class="nav-section-label">Connect</div>
-      <button class="nav-item active" id="nav-connections" onclick="showTab('connections')">
-        <span class="nav-icon">🔗</span> Connections
-      </button>
-
+      <button class="nav-item active" id="nav-connections" onclick="showTab('connections')"><span class="nav-icon">🔗</span> Connections</button>
       <div class="nav-section-label">Use Data</div>
-      <button class="nav-item" id="nav-mcp" onclick="showTab('mcp')">
-        <span class="nav-icon">🤖</span> Claude MCP
-      </button>
-      <button class="nav-item" id="nav-looker" onclick="showTab('looker')">
-        <span class="nav-icon">📊</span> Looker Studio
-      </button>
-
+      <button class="nav-item" id="nav-mcp" onclick="showTab('mcp')"><span class="nav-icon">🤖</span> Claude MCP</button>
+      <button class="nav-item" id="nav-looker" onclick="showTab('looker')"><span class="nav-icon">📊</span> Looker Studio</button>
       <div class="sidebar-bottom">
         <div class="user-info">
           <div class="user-avatar" id="user-avatar">A</div>
@@ -625,223 +285,109 @@
       </div>
     </aside>
 
-    <!-- MAIN -->
     <main class="main">
 
-      <!-- ══ TAB: CONNECTIONS ══ -->
       <div class="tab-panel active" id="panel-connections">
         <div class="page-header">
           <h1 class="page-title">Connections</h1>
           <p class="page-sub">Connect your ad platforms — one connection unlocks both Claude MCP and Looker Studio</p>
         </div>
-
         <div class="connections-grid">
-
-          <!-- META ADS -->
           <div class="connection-card">
             <div class="connection-header">
-              <div class="connection-platform">
-                <div class="platform-logo meta">📘</div>
-                <div>
-                  <div class="platform-name">Meta Ads</div>
-                  <div class="platform-type">Facebook & Instagram</div>
-                </div>
-              </div>
+              <div class="connection-platform"><div class="platform-logo meta">📘</div><div><div class="platform-name">Meta Ads</div><div class="platform-type">Facebook & Instagram</div></div></div>
               <div class="status-badge disconnected" id="meta-status">Not connected</div>
             </div>
             <p class="connection-desc">Connect your Meta Ads account so Claude and Looker Studio can pull campaign data, spending, and performance reports.</p>
             <button class="btn-connect" id="meta-btn" onclick="connectMeta()">+ Connect with Meta</button>
           </div>
-
-          <!-- GOOGLE ADS -->
           <div class="connection-card">
             <div class="connection-header">
-              <div class="connection-platform">
-                <div class="platform-logo google">🔍</div>
-                <div>
-                  <div class="platform-name">Google Ads</div>
-                  <div class="platform-type">Search & Display</div>
-                </div>
-              </div>
+              <div class="connection-platform"><div class="platform-logo google">🔍</div><div><div class="platform-name">Google Ads</div><div class="platform-type">Search & Display</div></div></div>
               <div class="status-badge coming-soon">Coming soon</div>
             </div>
             <p class="connection-desc">Pull Google Ads data including keywords, Quality Score, impressions, and conversion reports directly into Claude.</p>
             <button class="btn-connect" disabled>Coming soon</button>
           </div>
-
-          <!-- GOOGLE ANALYTICS -->
           <div class="connection-card">
             <div class="connection-header">
-              <div class="connection-platform">
-                <div class="platform-logo ga">📈</div>
-                <div>
-                  <div class="platform-name">Google Analytics</div>
-                  <div class="platform-type">GA4</div>
-                </div>
-              </div>
+              <div class="connection-platform"><div class="platform-logo ga">📈</div><div><div class="platform-name">Google Analytics</div><div class="platform-type">GA4</div></div></div>
               <div class="status-badge coming-soon">Coming soon</div>
             </div>
             <p class="connection-desc">Connect GA4 to let Claude analyze website traffic, conversions, and audience behavior alongside your ad data.</p>
             <button class="btn-connect" disabled>Coming soon</button>
           </div>
-
         </div>
 
-        <!-- ACCOUNT SELECTION -->
         <div id="account-section" style="display:none;">
-          <div class="section-header">
-            <div class="section-title-sm">📌 Active Ad Account</div>
-            <div class="plan-badge" id="plan-badge">Free</div>
-          </div>
-          <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.9rem;">
-            Select which Meta Ads account to use with Looker Studio and Claude. Free plan allows 1 account.
-          </p>
+          <div class="section-header"><div class="section-title-sm">📌 Active Ad Account</div><div class="plan-badge" id="plan-badge">Free</div></div>
+          <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.9rem;">Select which Meta Ads account to use with Looker Studio and Claude. Free plan allows 1 account.</p>
           <div class="account-select-wrap">
-            <select id="accounts-select" onchange="onAccountSelectChange(this)">
-              <option value="">Loading accounts…</option>
-            </select>
+            <select id="accounts-select" onchange="onAccountSelectChange(this)"><option value="">Loading accounts…</option></select>
             <span class="account-select-arrow">▼</span>
           </div>
-          <div class="account-selected-info" id="account-selected-info">
-            <span>✓</span><span id="account-selected-name"></span> is active
-          </div>
-
-          <div class="section-header">
-            <div class="section-title-sm">💳 Your Plan</div>
-          </div>
+          <div class="account-selected-info" id="account-selected-info"><span>✓</span><span id="account-selected-name"></span> is active</div>
+          <div class="section-header"><div class="section-title-sm">💳 Your Plan</div></div>
           <div class="plan-grid">
             <div class="plan-card current" id="plan-free">
-              <div class="plan-card-label">Free — Current Plan</div>
-              <div class="plan-card-price">Free</div>
-              <div class="plan-card-desc">Perfect to get started</div>
-              <ul class="plan-features-list">
-                <li>1 ad account</li>
-                <li>Meta Ads access</li>
-                <li>Claude MCP</li>
-                <li>Looker Studio connector</li>
-              </ul>
+              <div class="plan-card-label">Free — Current Plan</div><div class="plan-card-price">Free</div><div class="plan-card-desc">Perfect to get started</div>
+              <ul class="plan-features-list"><li>1 ad account</li><li>Meta Ads access</li><li>Claude MCP</li><li>Looker Studio connector</li></ul>
               <div class="btn-plan current">Current plan</div>
             </div>
             <div class="plan-card" id="plan-pro">
-              <div class="plan-card-label">Pro</div>
-              <div class="plan-card-price">Custom <span>/ month</span></div>
-              <div class="plan-card-desc">For agencies and power users</div>
-              <ul class="plan-features-list">
-                <li>Unlimited ad accounts</li>
-                <li>Meta + Google Ads</li>
-                <li>Priority support</li>
-                <li>Multi-user access</li>
-              </ul>
+              <div class="plan-card-label">Pro</div><div class="plan-card-price">Custom <span>/ month</span></div><div class="plan-card-desc">For agencies and power users</div>
+              <ul class="plan-features-list"><li>Unlimited ad accounts</li><li>Meta + Google Ads</li><li>Priority support</li><li>Multi-user access</li></ul>
               <a href="mailto:support@syncmetrics.io?subject=SyncMetrics Pro Enquiry" class="btn-plan upgrade">Contact us →</a>
             </div>
           </div>
         </div>
-
       </div>
 
-      <!-- ══ TAB: MCP ══ -->
       <div class="tab-panel" id="panel-mcp">
-        <div class="page-header">
-          <h1 class="page-title">Claude MCP Server</h1>
-          <p class="page-sub">Ask Claude questions about your ad data in natural language</p>
-        </div>
-
+        <div class="page-header"><h1 class="page-title">Claude MCP Server</h1><p class="page-sub">Ask Claude questions about your ad data in natural language</p></div>
         <div class="info-card">
           <div class="info-card-title">🤖 Your personal MCP URL</div>
-          <p>This URL is unique to your account. Anyone with it can query your ad data — keep it private. If compromised, regenerate it below.</p>
+          <p>This URL is unique to your account. Anyone with it can query your ad data — keep it private.</p>
           <div class="url-row">
             <div class="url-box" id="mcp-url">Loading…</div>
             <button class="btn-copy" onclick="copyText('mcp-url', this)">Copy</button>
           </div>
           <div class="transport-badges" style="justify-content:space-between;align-items:center;">
-            <div style="display:flex;gap:0.45rem;">
-              <span class="badge sse">SSE — Claude Code</span>
-              <span class="badge http">Streamable HTTP — Claude.ai web</span>
-            </div>
-            <button onclick="regenerateMcpSecret(this)" style="background:transparent;border:1px solid rgba(248,113,113,0.3);color:var(--danger);font-family:var(--font);font-size:0.72rem;padding:0.28rem 0.7rem;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(248,113,113,0.1)'" onmouseout="this.style.background='transparent'">
-              🔄 Regenerate
-            </button>
+            <div style="display:flex;gap:0.45rem;"><span class="badge sse">SSE — Claude Code</span><span class="badge http">Streamable HTTP — Claude.ai web</span></div>
+            <button onclick="regenerateMcpSecret(this)" style="background:transparent;border:1px solid rgba(220,38,38,0.25);color:var(--danger);font-family:var(--font);font-size:0.72rem;padding:0.28rem 0.7rem;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(220,38,38,0.06)'" onmouseout="this.style.background='transparent'">🔄 Regenerate</button>
           </div>
         </div>
-
         <div class="info-card">
           <div class="info-card-title">📋 How to add to Claude.ai (web)</div>
           <div class="steps">
-            <div class="step">
-              <div class="step-num">1</div>
-              <div class="step-text">Make sure Meta Ads is <strong>connected</strong> on the Connections tab.</div>
-            </div>
-            <div class="step">
-              <div class="step-num">2</div>
-              <div class="step-text">Open <strong>Claude.ai → Settings → Integrations</strong> and click <strong>Add MCP Server</strong>.</div>
-            </div>
-            <div class="step">
-              <div class="step-num">3</div>
-              <div class="step-text">Paste your personal MCP URL above, name it <code>SyncMetrics</code>, click <strong>Save</strong>.</div>
-            </div>
-            <div class="step">
-              <div class="step-num">4</div>
-              <div class="step-text">Start a new chat and ask: <code>What are my Meta ad accounts?</code></div>
-            </div>
+            <div class="step"><div class="step-num">1</div><div class="step-text">Make sure Meta Ads is <strong>connected</strong> on the Connections tab.</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">Open <strong>Claude.ai → Settings → Integrations</strong> and click <strong>Add MCP Server</strong>.</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text">Paste your personal MCP URL above, name it <code>SyncMetrics</code>, click <strong>Save</strong>.</div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-text">Start a new chat and ask: <code>What are my Meta ad accounts?</code></div></div>
           </div>
-
           <div class="divider"></div>
-
           <div class="info-card-title">🖥️ How to add to Claude Code (CLI)</div>
           <div class="steps">
-            <div class="step">
-              <div class="step-num">1</div>
-              <div class="step-text">Run: <code>claude mcp add syncmetrics --transport sse &lt;your-url&gt;</code></div>
-            </div>
-            <div class="step">
-              <div class="step-num">2</div>
-              <div class="step-text">Or edit <code>~/.claude/settings.json</code> and add your URL under <code>mcpServers</code>.</div>
-            </div>
+            <div class="step"><div class="step-num">1</div><div class="step-text">Run: <code>claude mcp add syncmetrics --transport sse &lt;your-url&gt;</code></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">Or edit <code>~/.claude/settings.json</code> and add your URL under <code>mcpServers</code>.</div></div>
           </div>
         </div>
       </div>
 
-      <!-- ══ TAB: LOOKER STUDIO ══ -->
       <div class="tab-panel" id="panel-looker">
-        <div class="page-header">
-          <h1 class="page-title">Looker Studio</h1>
-          <p class="page-sub">Pull your Meta Ads data into Looker Studio dashboards and reports</p>
-        </div>
-
+        <div class="page-header"><h1 class="page-title">Looker Studio</h1><p class="page-sub">Pull your Meta Ads data into Looker Studio dashboards and reports</p></div>
         <div class="info-card">
           <div class="info-card-title">📊 How to connect Looker Studio</div>
           <div class="steps">
-            <div class="step">
-              <div class="step-num">1</div>
-              <div class="step-text">Make sure Meta Ads is <strong>connected</strong> on the Connections tab first.</div>
-            </div>
-            <div class="step">
-              <div class="step-num">2</div>
-              <div class="step-text">Click the button below to open Looker Studio → <strong>Create data source</strong>.</div>
-            </div>
-            <div class="step">
-              <div class="step-num">3</div>
-              <div class="step-text">Search for <strong>SyncMetrics</strong> in the connector list and select it.</div>
-            </div>
-            <div class="step">
-              <div class="step-num">4</div>
-              <div class="step-text">Click <strong>Sign in with SyncMetrics</strong> — log in with the same email and password you use here.</div>
-            </div>
-            <div class="step">
-              <div class="step-num">5</div>
-              <div class="step-text">Your ad accounts load automatically. Select an account and click <strong>Connect</strong>.</div>
-            </div>
-            <div class="step">
-              <div class="step-num">6</div>
-              <div class="step-text">Click <strong>Create Report</strong> — your Meta Ads data is ready to visualize!</div>
-            </div>
+            <div class="step"><div class="step-num">1</div><div class="step-text">Make sure Meta Ads is <strong>connected</strong> on the Connections tab first.</div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-text">Click the button below to open Looker Studio → <strong>Create data source</strong>.</div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-text">Search for <strong>SyncMetrics</strong> in the connector list and select it.</div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-text">Click <strong>Sign in with SyncMetrics</strong> — log in with the same email and password you use here.</div></div>
+            <div class="step"><div class="step-num">5</div><div class="step-text">Your ad accounts load automatically. Select an account and click <strong>Connect</strong>.</div></div>
+            <div class="step"><div class="step-num">6</div><div class="step-text">Click <strong>Create Report</strong> — your Meta Ads data is ready to visualize!</div></div>
           </div>
-
-          <a class="btn-cta looker" href="https://lookerstudio.google.com/datasources/create" target="_blank">
-            Open Looker Studio →
-          </a>
+          <a class="btn-cta looker" href="https://lookerstudio.google.com/datasources/create" target="_blank">Open Looker Studio →</a>
         </div>
-
         <div class="info-card">
           <div class="info-card-title">📐 Available fields</div>
           <p>The connector provides the following fields you can use in any Looker Studio chart:</p>
@@ -863,17 +409,14 @@
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-  const SUPABASE_URL     = 'https://rstkaditqmateiaodsap.supabase.co';
+  const SUPABASE_URL      = 'https://rstkaditqmateiaodsap.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_aVMHRc7r5SWTTC-C5dl1pw_ov0UI-vh';
-  const SERVER_URL       = 'https://syncmetrics-server.onrender.com';
-
-  const { createClient } = supabase;
+  const SERVER_URL        = 'https://syncmetrics-server.onrender.com';
+  const { createClient }  = supabase;
   const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
   let currentUser = null;
 
   async function init() {
@@ -884,7 +427,6 @@
       else { currentUser = null; showAuth(); }
     });
   }
-
   function switchAuthTab(tab, btn) {
     document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
@@ -892,17 +434,12 @@
     document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
     document.getElementById('auth-msg').className = 'auth-message';
   }
-
   async function handleGoogleLogin() {
-    const { error } = await sb.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin + '/dashboard/' }
-    });
+    const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.origin + '/dashboard/' } });
     if (error) showAuthMsg(error.message, 'error');
   }
-
   async function handleLogin() {
-    const email    = document.getElementById('login-email').value.trim();
+    const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
     if (!email || !password) return showAuthMsg('Please fill in all fields.', 'error');
     const btn = document.querySelector('#login-form .btn-primary');
@@ -911,9 +448,8 @@
     btn.disabled = false; btn.textContent = 'Log in →';
     if (error) showAuthMsg(error.message, 'error');
   }
-
   async function handleSignup() {
-    const email    = document.getElementById('signup-email').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value;
     if (!email || !password) return showAuthMsg('Please fill in all fields.', 'error');
     if (password.length < 6) return showAuthMsg('Password must be at least 6 characters.', 'error');
@@ -924,20 +460,9 @@
     if (error) showAuthMsg(error.message, 'error');
     else showAuthMsg('Account created! Check your email to confirm.', 'success');
   }
-
   async function handleLogout() { await sb.auth.signOut(); }
-
-  function showDashboard() {
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('dashboard-screen').style.display = 'block';
-    setupDashboard();
-  }
-
-  function showAuth() {
-    document.getElementById('auth-screen').style.display = 'flex';
-    document.getElementById('dashboard-screen').style.display = 'none';
-  }
-
+  function showDashboard() { document.getElementById('auth-screen').style.display = 'none'; document.getElementById('dashboard-screen').style.display = 'block'; setupDashboard(); }
+  function showAuth() { document.getElementById('auth-screen').style.display = 'flex'; document.getElementById('dashboard-screen').style.display = 'none'; }
   async function setupDashboard() {
     const email = currentUser.email;
     document.getElementById('user-email-display').textContent = email;
@@ -945,56 +470,36 @@
     await Promise.all([checkConnections(), loadMcpUrl()]);
     checkOAuthReturn();
   }
-
   async function loadMcpUrl() {
     try {
       const { data: { session } } = await sb.auth.getSession();
-      const res = await fetch(`${SERVER_URL}/api/mcp-secret`, {
-        headers: { 'Authorization': `Bearer ${session.access_token}` }
-      });
-      if (res.ok) {
-        const { mcp_secret } = await res.json();
-        document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${mcp_secret}`;
-      } else {
-        document.getElementById('mcp-url').textContent = 'Connect Meta Ads first to get your URL';
-      }
-    } catch (e) {
-      document.getElementById('mcp-url').textContent = 'Failed to load URL';
-    }
+      const res = await fetch(`${SERVER_URL}/api/mcp-secret`, { headers: { 'Authorization': `Bearer ${session.access_token}` } });
+      if (res.ok) { const { mcp_secret } = await res.json(); document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${mcp_secret}`; }
+      else document.getElementById('mcp-url').textContent = 'Connect Meta Ads first to get your URL';
+    } catch (e) { document.getElementById('mcp-url').textContent = 'Failed to load URL'; }
   }
-
   async function regenerateMcpSecret(btn) {
-    if (!confirm('This will invalidate your current MCP URL. Any Claude integrations using the old URL will stop working. Continue?')) return;
+    if (!confirm('This will invalidate your current MCP URL. Continue?')) return;
     btn.textContent = '⏳ Regenerating…'; btn.disabled = true;
     try {
       const { data: { session } } = await sb.auth.getSession();
-      const res = await fetch(`${SERVER_URL}/api/mcp-secret/regenerate`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${session.access_token}` }
-      });
-      if (res.ok) {
-        const { mcp_secret } = await res.json();
-        document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${mcp_secret}`;
-        showToast('✓ MCP URL regenerated. Update your Claude settings.', 'success');
-      }
+      const res = await fetch(`${SERVER_URL}/api/mcp-secret/regenerate`, { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}` } });
+      if (res.ok) { const { mcp_secret } = await res.json(); document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${mcp_secret}`; showToast('✓ MCP URL regenerated.', 'success'); }
     } catch (e) { showToast('Failed to regenerate. Try again.', 'error'); }
     btn.textContent = '🔄 Regenerate'; btn.disabled = false;
   }
-
   function showTab(tab) {
-    ['connections', 'mcp', 'looker'].forEach(t => {
-      document.getElementById('panel-' + t).classList.toggle('active', t === tab);
-      document.getElementById('nav-' + t).classList.toggle('active', t === tab);
+    ['connections','mcp','looker'].forEach(t => {
+      document.getElementById('panel-'+t).classList.toggle('active', t===tab);
+      document.getElementById('nav-'+t).classList.toggle('active', t===tab);
     });
   }
-
   async function checkConnections() {
     try {
       const { data } = await sb.from('user_tokens').select('platform').eq('user_id', currentUser.id);
       if (data) data.forEach(row => { if (row.platform === 'meta') setMetaConnected(true); });
-    } catch (e) { console.error('checkConnections error:', e); }
+    } catch (e) { console.error(e); }
   }
-
   async function loadAccountSection() {
     document.getElementById('account-section').style.display = 'block';
     document.getElementById('accounts-select').innerHTML = '<option value="">Loading accounts…</option>';
@@ -1004,116 +509,40 @@
         fetch(`${SERVER_URL}/api/accounts`, { headers: { 'Authorization': `Bearer ${session.access_token}` } }),
         fetch(`${SERVER_URL}/api/user-settings?platform=meta`, { headers: { 'Authorization': `Bearer ${session.access_token}` } })
       ]);
-      const acctData   = await acctRes.json();
-      const settings   = await settingsRes.json();
-      const accounts   = (acctData.data || []).filter(a => a.account_status === 1);
-      const selectedId = settings.selected_account_id || '';
-      const plan       = settings.plan || 'free';
-
+      const acctData = await acctRes.json(); const settings = await settingsRes.json();
+      const accounts = (acctData.data || []).filter(a => a.account_status === 1);
+      const selectedId = settings.selected_account_id || ''; const plan = settings.plan || 'free';
       const badge = document.getElementById('plan-badge');
-      badge.textContent = plan === 'pro' ? 'Pro' : 'Free';
-      badge.className   = plan === 'pro' ? 'plan-badge pro' : 'plan-badge';
-
-      if (plan === 'pro') {
-        document.getElementById('plan-free').classList.remove('current');
-        document.getElementById('plan-pro').classList.add('current');
-        document.querySelector('#plan-pro .plan-card-label').textContent = 'Pro — Current Plan';
-        document.querySelector('#plan-pro .btn-plan').className = 'btn-plan current';
-        document.querySelector('#plan-pro .btn-plan').textContent = 'Current plan';
-      }
-
+      badge.textContent = plan === 'pro' ? 'Pro' : 'Free'; badge.className = plan === 'pro' ? 'plan-badge pro' : 'plan-badge';
+      if (plan === 'pro') { document.getElementById('plan-free').classList.remove('current'); document.getElementById('plan-pro').classList.add('current'); document.querySelector('#plan-pro .plan-card-label').textContent = 'Pro — Current Plan'; document.querySelector('#plan-pro .btn-plan').className = 'btn-plan current'; document.querySelector('#plan-pro .btn-plan').textContent = 'Current plan'; }
       const select = document.getElementById('accounts-select');
       select.innerHTML = '<option value="">— Select an ad account —</option>';
-      if (accounts.length === 0) { select.innerHTML = '<option value="">No active accounts found</option>'; return; }
-
-      accounts.forEach(account => {
-        const cleanId = account.id.replace('act_', '');
-        const opt = document.createElement('option');
-        opt.value = cleanId; opt.dataset.name = account.name; opt.dataset.currency = account.currency;
-        opt.textContent = `${account.name} (${account.currency})`;
-        if (cleanId === selectedId) opt.selected = true;
-        select.appendChild(opt);
-      });
-
-      if (selectedId) {
-        const sel = accounts.find(a => a.id.replace('act_', '') === selectedId);
-        if (sel) showSelectedInfo(sel.name);
-      }
-    } catch (e) {
-      document.getElementById('accounts-select').innerHTML = '<option value="">Failed to load accounts</option>';
-      console.error(e);
-    }
+      if (!accounts.length) { select.innerHTML = '<option value="">No active accounts found</option>'; return; }
+      accounts.forEach(account => { const cleanId = account.id.replace('act_',''); const opt = document.createElement('option'); opt.value = cleanId; opt.dataset.name = account.name; opt.dataset.currency = account.currency; opt.textContent = `${account.name} (${account.currency})`; if (cleanId === selectedId) opt.selected = true; select.appendChild(opt); });
+      if (selectedId) { const sel = accounts.find(a => a.id.replace('act_','') === selectedId); if (sel) showSelectedInfo(sel.name); }
+    } catch (e) { document.getElementById('accounts-select').innerHTML = '<option value="">Failed to load accounts</option>'; }
   }
-
-  async function onAccountSelectChange(select) {
-    const accountId   = select.value;
-    const accountName = select.options[select.selectedIndex]?.dataset.name || '';
-    if (!accountId) return;
-    await selectAccount(accountId, accountName);
-  }
-
+  async function onAccountSelectChange(select) { const id = select.value; const name = select.options[select.selectedIndex]?.dataset.name || ''; if (!id) return; await selectAccount(id, name); }
   async function selectAccount(accountId, accountName) {
     try {
       const { data: { session } } = await sb.auth.getSession();
-      const res = await fetch(`${SERVER_URL}/api/user-settings`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ platform: 'meta', selected_account_id: accountId, selected_account_name: accountName })
-      });
+      const res = await fetch(`${SERVER_URL}/api/user-settings`, { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ platform: 'meta', selected_account_id: accountId, selected_account_name: accountName }) });
       if (res.ok) { showSelectedInfo(accountName); showToast(`✓ "${accountName}" set as active account`, 'success'); }
-      else showToast('Failed to save selection. Try again.', 'error');
-    } catch (e) { showToast('Error saving account selection.', 'error'); }
+      else showToast('Failed to save. Try again.', 'error');
+    } catch (e) { showToast('Error saving account.', 'error'); }
   }
-
-  function showSelectedInfo(name) {
-    document.getElementById('account-selected-name').textContent = name;
-    document.getElementById('account-selected-info').classList.add('show');
-  }
-
+  function showSelectedInfo(name) { document.getElementById('account-selected-name').textContent = name; document.getElementById('account-selected-info').classList.add('show'); }
   function connectMeta() { window.location.href = `${SERVER_URL}/oauth/meta?user_id=${currentUser.id}`; }
-
-  async function disconnectMeta() {
-    const { error } = await sb.from('user_tokens').delete().eq('user_id', currentUser.id).eq('platform', 'meta');
-    if (!error) { setMetaConnected(false); showToast('Meta Ads disconnected.', 'success'); }
-  }
-
-  function checkOAuthReturn() {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('connected') === 'meta') { setMetaConnected(true); showToast('✓ Meta Ads connected!', 'success'); window.history.replaceState({}, '', window.location.pathname); }
-    if (params.get('error') === 'oauth_failed') { showToast('Meta connection failed. Try again.', 'error'); window.history.replaceState({}, '', window.location.pathname); }
-  }
-
+  async function disconnectMeta() { const { error } = await sb.from('user_tokens').delete().eq('user_id', currentUser.id).eq('platform', 'meta'); if (!error) { setMetaConnected(false); showToast('Meta Ads disconnected.', 'success'); } }
+  function checkOAuthReturn() { const p = new URLSearchParams(window.location.search); if (p.get('connected')==='meta') { setMetaConnected(true); showToast('✓ Meta Ads connected!','success'); window.history.replaceState({},'',window.location.pathname); } if (p.get('error')==='oauth_failed') { showToast('Meta connection failed.','error'); window.history.replaceState({},'',window.location.pathname); } }
   function setMetaConnected(connected) {
-    const status = document.getElementById('meta-status');
-    const btn    = document.getElementById('meta-btn');
-    if (connected) {
-      status.textContent = 'Connected'; status.className = 'status-badge connected';
-      btn.textContent = '✕ Disconnect'; btn.className = 'btn-connect connected'; btn.onclick = disconnectMeta;
-      loadAccountSection();
-    } else {
-      status.textContent = 'Not connected'; status.className = 'status-badge disconnected';
-      btn.textContent = '+ Connect with Meta'; btn.className = 'btn-connect'; btn.onclick = connectMeta;
-      document.getElementById('account-section').style.display = 'none';
-    }
+    const status = document.getElementById('meta-status'); const btn = document.getElementById('meta-btn');
+    if (connected) { status.textContent = 'Connected'; status.className = 'status-badge connected'; btn.textContent = '✕ Disconnect'; btn.className = 'btn-connect connected'; btn.onclick = disconnectMeta; loadAccountSection(); }
+    else { status.textContent = 'Not connected'; status.className = 'status-badge disconnected'; btn.textContent = '+ Connect with Meta'; btn.className = 'btn-connect'; btn.onclick = connectMeta; document.getElementById('account-section').style.display = 'none'; }
   }
-
-  function copyText(elementId, btn) {
-    navigator.clipboard.writeText(document.getElementById(elementId).textContent);
-    const orig = btn.textContent; btn.textContent = '✓ Copied!';
-    setTimeout(() => btn.textContent = orig, 2000);
-  }
-
-  function showToast(msg, type = 'success') {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.className = `toast ${type} show`;
-    setTimeout(() => t.classList.remove('show'), 3500);
-  }
-
-  function showAuthMsg(msg, type) {
-    const el = document.getElementById('auth-msg');
-    el.textContent = msg; el.className = `auth-message ${type}`;
-  }
-
+  function copyText(id, btn) { navigator.clipboard.writeText(document.getElementById(id).textContent); const orig = btn.textContent; btn.textContent = '✓ Copied!'; setTimeout(() => btn.textContent = orig, 2000); }
+  function showToast(msg, type='success') { const t = document.getElementById('toast'); t.textContent = msg; t.className = `toast ${type} show`; setTimeout(() => t.classList.remove('show'), 3500); }
+  function showAuthMsg(msg, type) { const el = document.getElementById('auth-msg'); el.textContent = msg; el.className = `auth-message ${type}`; }
   init();
 </script>
 </body>
