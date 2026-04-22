@@ -4,810 +4,547 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard — SyncMetrics</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #05060f;
-      --surface: #0d0f1e;
-      --card: #111326;
-      --border: rgba(255,255,255,0.07);
-      --accent: #4f6ef7;
-      --accent2: #7c3aed;
-      --glow: rgba(79,110,247,0.25);
-      --text: #e8eaf6;
-      --muted: #7b82a8;
-      --white: #ffffff;
-      --success: #22c55e;
-      --warning: #f59e0b;
-      --danger: #ef4444;
+      --bg:          #04040e;
+      --accent:      #6366f1;
+      --accent2:     #8b5cf6;
+      --accent-text: #a5b4fc;
+      --glow:        rgba(99,102,241,0.35);
+      --text:        rgba(255,255,255,0.9);
+      --muted:       rgba(255,255,255,0.42);
+      --white:       #ffffff;
+      --success:     #4ade80;
+      --warning:     #fbbf24;
+      --danger:      #f87171;
+      --card-bg:     rgba(255,255,255,0.055);
+      --card-border: rgba(255,255,255,0.10);
+      --blur:        blur(28px) saturate(180%);
+      --r-card:      18px;
+      --r-btn:       12px;
+      --r-input:     11px;
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+              "Helvetica Neue", system-ui, sans-serif;
     }
 
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--font);
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+    }
+
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 50% at 10%  5%,  rgba(99,102,241,0.16) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 90% 90%,  rgba(139,92,246,0.14) 0%, transparent 60%),
+        linear-gradient(160deg, #060616 0%, #04040e 100%);
     }
 
     /* ── AUTH ── */
     #auth-screen {
+      position: relative; z-index: 1;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       padding: 2rem;
-      background: radial-gradient(ellipse at 50% 0%, rgba(79,110,247,0.12) 0%, transparent 60%);
     }
 
     .auth-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 2.5rem;
-      width: 100%;
-      max-width: 420px;
+      background: var(--card-bg);
+      -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+      border: 1px solid var(--card-border);
+      border-radius: 28px; padding: 2.5rem 2.25rem;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.08) inset;
     }
 
     .auth-logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: 2rem;
-      text-align: center;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--white); margin-bottom: 1.75rem;
+      text-align: center; letter-spacing: -0.5px;
     }
-
-    .auth-logo span { color: var(--accent); }
+    .auth-logo span { color: var(--accent-text); }
 
     .auth-tabs {
       display: flex;
-      background: var(--surface);
-      border-radius: 10px;
-      padding: 4px;
-      margin-bottom: 1.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 10px; padding: 3px;
+      margin-bottom: 1.4rem;
     }
-
     .auth-tab {
-      flex: 1;
-      padding: 0.5rem;
-      border: none;
-      border-radius: 7px;
-      background: transparent;
-      color: var(--muted);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
+      flex: 1; padding: 0.5rem;
+      border: none; border-radius: 8px;
+      background: transparent; color: var(--muted);
+      font-family: var(--font); font-size: 0.875rem;
+      font-weight: 500; cursor: pointer; transition: all 0.2s;
     }
-
     .auth-tab.active {
-      background: var(--card);
+      background: rgba(255,255,255,0.08);
       color: var(--white);
       box-shadow: 0 1px 4px rgba(0,0,0,0.3);
     }
 
-    .form-group { margin-bottom: 1rem; }
-
+    .form-group { margin-bottom: 0.9rem; }
     .form-group label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--muted);
-      margin-bottom: 0.4rem;
-      letter-spacing: 0.5px;
+      display: block; font-size: 0.7rem; font-weight: 500;
+      color: var(--muted); margin-bottom: 0.35rem;
+      letter-spacing: 0.6px; text-transform: uppercase;
     }
-
     .form-group input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s;
+      width: 100%; padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--card-border);
+      border-radius: var(--r-input);
+      color: var(--white); font-family: var(--font);
+      font-size: 0.9rem; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
     }
-
-    .form-group input:focus { border-color: var(--accent); }
+    .form-group input::placeholder { color: rgba(255,255,255,0.2); }
+    .form-group input:focus {
+      border-color: rgba(99,102,241,0.6);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.18);
+    }
 
     .btn-primary {
-      width: 100%;
-      padding: 0.85rem;
-      border: none;
-      border-radius: 10px;
-      background: var(--accent);
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 0.5rem;
-      box-shadow: 0 0 20px var(--glow);
+      width: 100%; padding: 0.82rem;
+      border: none; border-radius: var(--r-btn);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: var(--white); font-family: var(--font);
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; margin-top: 0.4rem;
+      box-shadow: 0 4px 20px var(--glow), 0 1px 0 rgba(255,255,255,0.15) inset;
     }
-
-    .btn-primary:hover { background: #3d5ce5; transform: translateY(-1px); }
-    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 6px 28px var(--glow); }
+    .btn-primary:active { transform: scale(0.98); opacity: 0.88; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     .btn-google {
-      width: 100%;
-      padding: 0.85rem;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: var(--surface);
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 500;
-      cursor: pointer;
+      width: 100%; padding: 0.8rem;
+      border: 1px solid var(--card-border);
+      border-radius: var(--r-btn);
+      background: rgba(255,255,255,0.05);
+      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+      color: var(--text); font-family: var(--font);
+      font-size: 0.9rem; font-weight: 500; cursor: pointer;
       transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      margin-bottom: 1.25rem;
+      display: flex; align-items: center;
+      justify-content: center; gap: 0.6rem; margin-bottom: 1.1rem;
     }
-
-    .btn-google:hover { background: #1a1c2e; border-color: rgba(255,255,255,0.15); }
+    .btn-google:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); }
 
     .auth-divider {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
+      display: flex; align-items: center;
+      gap: 0.75rem; margin-bottom: 1.1rem;
     }
-
     .auth-divider::before, .auth-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
+      content: ''; flex: 1; height: 1px;
+      background: var(--card-border);
     }
-
-    .auth-divider span {
-      color: var(--muted);
-      font-size: 0.78rem;
-      white-space: nowrap;
-    }
+    .auth-divider span { color: var(--muted); font-size: 0.75rem; white-space: nowrap; }
 
     .auth-message {
-      text-align: center;
-      font-size: 0.85rem;
-      margin-top: 1rem;
-      padding: 0.75rem;
-      border-radius: 8px;
-      display: none;
+      text-align: center; font-size: 0.82rem;
+      margin-top: 0.85rem; padding: 0.7rem;
+      border-radius: 10px; display: none;
     }
-
     .auth-message.error {
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.2);
-      color: #fca5a5;
-      display: block;
+      background: rgba(248,113,113,0.1);
+      border: 1px solid rgba(248,113,113,0.22);
+      color: #fca5a5; display: block;
     }
-
     .auth-message.success {
-      background: rgba(34,197,94,0.1);
-      border: 1px solid rgba(34,197,94,0.2);
-      color: #86efac;
-      display: block;
+      background: rgba(74,222,128,0.1);
+      border: 1px solid rgba(74,222,128,0.22);
+      color: #86efac; display: block;
     }
 
     /* ── LAYOUT ── */
-    #dashboard-screen { display: none; }
+    #dashboard-screen { display: none; position: relative; z-index: 1; }
 
-    .layout {
-      display: flex;
-      min-height: 100vh;
-    }
+    .layout { display: flex; min-height: 100vh; }
 
     /* ── SIDEBAR ── */
     .sidebar {
-      width: 220px;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0; left: 0; bottom: 0;
+      width: 216px;
+      background: rgba(255,255,255,0.035);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      backdrop-filter: blur(24px) saturate(160%);
+      border-right: 1px solid var(--card-border);
+      padding: 1.4rem;
+      display: flex; flex-direction: column;
+      position: fixed; top: 0; left: 0; bottom: 0;
     }
 
     .sidebar-logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: 2rem;
-      padding-bottom: 1.25rem;
-      border-bottom: 1px solid var(--border);
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--white); letter-spacing: -0.4px;
+      margin-bottom: 1.75rem; padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--card-border);
     }
-
-    .sidebar-logo span { color: var(--accent); }
+    .sidebar-logo span { color: var(--accent-text); }
 
     .nav-section-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--muted);
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      margin: 1.25rem 0 0.5rem 0.85rem;
+      font-size: 0.65rem; font-weight: 600;
+      color: rgba(255,255,255,0.28); letter-spacing: 1px;
+      text-transform: uppercase; margin: 1rem 0 0.4rem 0.7rem;
     }
 
     .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.6rem 0.85rem;
-      border-radius: 10px;
-      color: var(--muted);
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: 0.15rem;
-      text-decoration: none;
-      border: none;
-      background: transparent;
-      width: 100%;
-      text-align: left;
+      display: flex; align-items: center; gap: 0.7rem;
+      padding: 0.55rem 0.8rem; border-radius: 10px;
+      color: var(--muted); font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+      margin-bottom: 0.1rem; text-decoration: none;
+      border: none; background: transparent;
+      width: 100%; text-align: left;
     }
-
     .nav-item:hover {
-      background: rgba(79,110,247,0.08);
-      color: var(--text);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.8);
     }
-
     .nav-item.active {
-      background: rgba(79,110,247,0.12);
-      color: var(--accent);
+      background: rgba(99,102,241,0.14);
+      color: var(--accent-text);
+      border: 1px solid rgba(99,102,241,0.2);
     }
-
-    .nav-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+    .nav-icon { font-size: 0.95rem; width: 18px; text-align: center; flex-shrink: 0; }
 
     .sidebar-bottom {
       margin-top: auto;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--card-border);
       padding-top: 1rem;
     }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.75rem;
-    }
-
+    .user-info { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem; }
     .user-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
+      width: 30px; height: 30px; border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--white);
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: var(--white); flex-shrink: 0;
     }
-
     .user-email {
-      font-size: 0.76rem;
-      color: var(--muted);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      font-size: 0.73rem; color: var(--muted);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
-
     .btn-logout {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: transparent;
-      color: var(--muted);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem;
-      cursor: pointer;
-      transition: all 0.2s;
+      width: 100%; padding: 0.45rem;
+      border: 1px solid var(--card-border);
+      border-radius: 8px; background: transparent;
+      color: var(--muted); font-family: var(--font);
+      font-size: 0.78rem; cursor: pointer; transition: all 0.2s;
     }
-
-    .btn-logout:hover { border-color: var(--danger); color: var(--danger); }
+    .btn-logout:hover { border-color: rgba(248,113,113,0.4); color: var(--danger); }
 
     /* ── MAIN ── */
     .main {
-      margin-left: 220px;
-      flex: 1;
-      padding: 2.5rem;
-      max-width: calc(100vw - 220px);
+      margin-left: 216px; flex: 1;
+      padding: 2.25rem; max-width: calc(100vw - 216px);
     }
 
-    /* ── PAGE HEADER ── */
-    .page-header { margin-bottom: 2rem; }
-
+    .page-header { margin-bottom: 1.75rem; }
     .page-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--white);
-      letter-spacing: -0.5px;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--white); letter-spacing: -0.5px;
     }
+    .page-sub { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
 
-    .page-sub {
-      color: var(--muted);
-      font-size: 0.875rem;
-      margin-top: 0.3rem;
-    }
-
-    /* ── TAB PANEL ── */
+    /* ── TABS ── */
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* ── CONNECTIONS ── */
+    /* ── CONNECTION CARDS ── */
     .connections-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.1rem;
     }
 
     .connection-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
+      background: var(--card-bg);
+      -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+      border: 1px solid var(--card-border);
+      border-radius: var(--r-card); padding: 1.4rem;
       transition: all 0.3s;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
     }
-
     .connection-card:hover {
-      border-color: rgba(79,110,247,0.25);
+      border-color: rgba(99,102,241,0.25);
       transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
     }
-
     .connection-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 0.9rem;
     }
-
-    .connection-platform {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
+    .connection-platform { display: flex; align-items: center; gap: 0.7rem; }
     .platform-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
     }
-
-    .platform-logo.meta  { background: rgba(24,119,242,0.15); border: 1px solid rgba(24,119,242,0.2); }
-    .platform-logo.google { background: rgba(234,67,53,0.12);  border: 1px solid rgba(234,67,53,0.2); }
-    .platform-logo.ga    { background: rgba(251,188,4,0.12);   border: 1px solid rgba(251,188,4,0.2); }
-
-    .platform-name {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: var(--white);
-    }
-
-    .platform-type { font-size: 0.77rem; color: var(--muted); }
+    .platform-logo.meta   { background: rgba(24,119,242,0.12); border: 1px solid rgba(24,119,242,0.2); }
+    .platform-logo.google { background: rgba(234,67,53,0.1);   border: 1px solid rgba(234,67,53,0.18); }
+    .platform-logo.ga     { background: rgba(251,188,4,0.1);   border: 1px solid rgba(251,188,4,0.18); }
+    .platform-name { font-size: 0.9rem; font-weight: 600; color: var(--white); }
+    .platform-type { font-size: 0.73rem; color: var(--muted); }
 
     .status-badge {
-      padding: 0.28rem 0.7rem;
-      border-radius: 100px;
-      font-size: 0.73rem;
-      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: 100px; font-size: 0.7rem; font-weight: 600;
     }
+    .status-badge.connected    { background: rgba(74,222,128,0.1);  border: 1px solid rgba(74,222,128,0.22);  color: var(--success); }
+    .status-badge.disconnected { background: rgba(255,255,255,0.05); border: 1px solid var(--card-border);     color: var(--muted); }
+    .status-badge.coming-soon  { background: rgba(251,191,36,0.1);   border: 1px solid rgba(251,191,36,0.22); color: var(--warning); }
 
-    .status-badge.connected    { background: rgba(34,197,94,0.12);  border: 1px solid rgba(34,197,94,0.2);  color: var(--success); }
-    .status-badge.disconnected { background: rgba(123,130,168,0.1); border: 1px solid var(--border);          color: var(--muted); }
-    .status-badge.coming-soon  { background: rgba(245,158,11,0.1);  border: 1px solid rgba(245,158,11,0.2); color: var(--warning); }
-
-    .connection-desc {
-      font-size: 0.83rem;
-      color: var(--muted);
-      margin-bottom: 1.25rem;
-      line-height: 1.5;
-    }
+    .connection-desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.1rem; line-height: 1.55; }
 
     .btn-connect {
-      width: 100%;
-      padding: 0.65rem;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: transparent;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
+      width: 100%; padding: 0.6rem;
+      border: 1px solid var(--card-border);
+      border-radius: var(--r-btn);
+      background: rgba(255,255,255,0.04);
+      color: var(--text); font-family: var(--font);
+      font-size: 0.85rem; font-weight: 500; cursor: pointer;
       transition: all 0.2s;
     }
-
-    .btn-connect:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); color: var(--white); }
-    .btn-connect.connected { border-color: rgba(239,68,68,0.3); color: var(--danger); }
-    .btn-connect.connected:hover { background: rgba(239,68,68,0.1); border-color: var(--danger); }
-    .btn-connect:disabled { opacity: 0.4; cursor: not-allowed; }
-
-    /* ── ACCOUNT SELECTION ── */
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 2rem 0 1rem;
+    .btn-connect:hover:not(:disabled) {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-color: transparent; color: var(--white);
+      box-shadow: 0 4px 16px var(--glow);
     }
+    .btn-connect.connected { border-color: rgba(248,113,113,0.3); color: var(--danger); }
+    .btn-connect.connected:hover { background: rgba(248,113,113,0.1); border-color: var(--danger); }
+    .btn-connect:disabled { opacity: 0.35; cursor: not-allowed; }
 
+    /* ── ACCOUNT SECTION ── */
+    .section-header {
+      display: flex; align-items: center;
+      justify-content: space-between; margin: 1.75rem 0 0.85rem;
+    }
     .section-title-sm {
-      font-family: 'Syne', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--white);
+      font-size: 0.95rem; font-weight: 600; color: var(--white);
     }
 
     .plan-badge {
-      padding: 0.25rem 0.75rem;
-      border-radius: 100px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      background: rgba(79,110,247,0.12);
-      border: 1px solid rgba(79,110,247,0.25);
-      color: var(--accent);
+      padding: 0.22rem 0.65rem; border-radius: 100px;
+      font-size: 0.68rem; font-weight: 600;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.25);
+      color: var(--accent-text);
     }
-
     .plan-badge.pro {
-      background: rgba(124,58,237,0.12);
-      border-color: rgba(124,58,237,0.25);
-      color: #a78bfa;
+      background: rgba(139,92,246,0.12);
+      border-color: rgba(139,92,246,0.25);
+      color: #c4b5fd;
     }
 
-    .account-select-wrap {
-      position: relative;
-      margin-bottom: 1.5rem;
-    }
-
+    .account-select-wrap { position: relative; margin-bottom: 1.25rem; }
     .account-select-wrap select {
-      width: 100%;
-      padding: 0.85rem 2.5rem 0.85rem 1rem;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      cursor: pointer;
-      outline: none;
-      appearance: none;
-      -webkit-appearance: none;
-      transition: border-color 0.2s;
+      width: 100%; padding: 0.8rem 2.5rem 0.8rem 1rem;
+      background: var(--card-bg);
+      -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+      border: 1px solid var(--card-border);
+      border-radius: 12px; color: var(--white);
+      font-family: var(--font); font-size: 0.875rem;
+      cursor: pointer; outline: none;
+      appearance: none; -webkit-appearance: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-
-    .account-select-wrap select:focus { border-color: var(--accent); }
-
-    .account-select-wrap select option {
-      background: var(--card);
-      color: var(--white);
+    .account-select-wrap select:focus {
+      border-color: rgba(99,102,241,0.5);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
     }
-
+    .account-select-wrap select option { background: #0d0d1e; color: var(--white); }
     .account-select-arrow {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      pointer-events: none;
-      color: var(--muted);
-      font-size: 0.75rem;
+      position: absolute; right: 1rem; top: 50%;
+      transform: translateY(-50%); pointer-events: none;
+      color: var(--muted); font-size: 0.7rem;
     }
-
     .account-selected-info {
-      display: none;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.6rem;
-      font-size: 0.8rem;
-      color: var(--success);
+      display: none; align-items: center; gap: 0.4rem;
+      margin-top: 0.5rem; font-size: 0.78rem; color: var(--success);
     }
-
     .account-selected-info.show { display: flex; }
 
     /* ── PLAN CARDS ── */
-    .plan-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
+    .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
     @media (max-width: 600px) { .plan-grid { grid-template-columns: 1fr; } }
 
     .plan-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
+      background: var(--card-bg);
+      -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+      border: 1px solid var(--card-border);
+      border-radius: var(--r-card); padding: 1.4rem;
       transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
-
     .plan-card.current {
-      border-color: var(--accent);
-      background: rgba(79,110,247,0.06);
+      border-color: rgba(99,102,241,0.4);
+      background: rgba(99,102,241,0.07);
     }
-
     .plan-card-label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.45rem;
     }
-
-    .plan-card.current .plan-card-label { color: var(--accent); }
-
+    .plan-card.current .plan-card-label { color: var(--accent-text); }
     .plan-card-price {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: 0.25rem;
+      font-size: 1.55rem; font-weight: 700;
+      color: var(--white); margin-bottom: 0.2rem; letter-spacing: -0.5px;
     }
-
-    .plan-card-price span {
-      font-size: 0.85rem;
-      font-weight: 400;
-      color: var(--muted);
-    }
-
+    .plan-card-price span { font-size: 0.82rem; font-weight: 400; color: var(--muted); }
     .plan-card-desc {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: 1rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
+      font-size: 0.78rem; color: var(--muted);
+      margin-bottom: 0.9rem; padding-bottom: 0.9rem;
+      border-bottom: 1px solid var(--card-border);
     }
-
-    .plan-features-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1.25rem;
-    }
-
+    .plan-features-list { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1.1rem; }
     .plan-features-list li {
-      font-size: 0.82rem;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      font-size: 0.8rem; color: var(--text);
+      display: flex; align-items: center; gap: 0.45rem;
     }
-
     .plan-features-list li::before {
-      content: '✓';
-      color: var(--accent);
-      font-weight: 700;
-      font-size: 0.75rem;
+      content: '✓'; color: var(--accent-text);
+      font-weight: 700; font-size: 0.72rem;
     }
-
     .btn-plan {
-      width: 100%;
-      padding: 0.6rem;
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-      text-decoration: none;
-      display: block;
+      width: 100%; padding: 0.55rem;
+      border-radius: 8px; font-family: var(--font);
+      font-size: 0.82rem; font-weight: 500; cursor: pointer;
+      transition: all 0.2s; text-align: center;
+      text-decoration: none; display: block;
     }
-
     .btn-plan.current {
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--muted);
-      cursor: default;
+      border: 1px solid var(--card-border);
+      background: transparent; color: var(--muted); cursor: default;
     }
-
     .btn-plan.upgrade {
       border: none;
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
       color: var(--white);
-      box-shadow: 0 0 16px var(--glow);
+      box-shadow: 0 3px 14px var(--glow);
     }
+    .btn-plan.upgrade:hover { opacity: 0.9; transform: translateY(-1px); }
 
-    .btn-plan.upgrade:hover { background: #3d5ce5; transform: translateY(-1px); }
-
-    /* ── INFO CARDS (MCP + Looker) ── */
+    /* ── INFO CARDS ── */
     .info-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.75rem;
-      margin-bottom: 1.5rem;
+      background: var(--card-bg);
+      -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+      border: 1px solid var(--card-border);
+      border-radius: var(--r-card); padding: 1.6rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
     }
-
     .info-card-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 0.4rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      font-size: 0.95rem; font-weight: 600;
+      color: var(--white); margin-bottom: 0.4rem;
+      display: flex; align-items: center; gap: 0.45rem;
     }
-
     .info-card p {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 1rem;
-      line-height: 1.55;
+      font-size: 0.83rem; color: var(--muted);
+      margin-bottom: 0.9rem; line-height: 1.55;
     }
 
-    .url-row {
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-    }
-
+    .url-row { display: flex; gap: 0.65rem; align-items: center; }
     .url-box {
-      flex: 1;
-      padding: 0.65rem 1rem;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--accent);
-      font-size: 0.82rem;
-      font-family: monospace;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      flex: 1; padding: 0.6rem 0.9rem;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 8px; color: var(--accent-text);
+      font-size: 0.8rem; font-family: monospace;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
-
     .btn-copy {
-      padding: 0.65rem 1.2rem;
-      border: 1px solid var(--accent);
+      padding: 0.6rem 1.1rem;
+      border: 1px solid rgba(99,102,241,0.35);
       border-radius: 8px;
-      background: rgba(79,110,247,0.1);
-      color: var(--accent);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
+      background: rgba(99,102,241,0.1);
+      color: var(--accent-text); font-family: var(--font);
+      font-size: 0.82rem; font-weight: 500; cursor: pointer;
+      transition: all 0.2s; white-space: nowrap;
     }
-
-    .btn-copy:hover { background: var(--accent); color: var(--white); }
+    .btn-copy:hover { background: var(--accent); border-color: var(--accent); color: var(--white); }
 
     /* ── STEPS ── */
-    .steps { display: flex; flex-direction: column; gap: 1rem; }
-
-    .step {
-      display: flex;
-      gap: 1rem;
-      align-items: flex-start;
-    }
-
+    .steps { display: flex; flex-direction: column; gap: 0.9rem; }
+    .step { display: flex; gap: 0.9rem; align-items: flex-start; }
     .step-num {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: rgba(79,110,247,0.15);
-      border: 1px solid rgba(79,110,247,0.3);
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(99,102,241,0.14);
+      border: 1px solid rgba(99,102,241,0.3);
+      color: var(--accent-text);
+      font-size: 0.72rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
     }
-
-    .step-text {
-      font-size: 0.875rem;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
+    .step-text { font-size: 0.85rem; color: var(--muted); line-height: 1.55; }
     .step-text strong { color: var(--text); }
 
     code {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      color: var(--accent);
-      font-family: monospace;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--card-border);
+      padding: 0.12rem 0.38rem; border-radius: 5px;
+      font-size: 0.78rem; color: var(--accent-text); font-family: monospace;
     }
 
     .btn-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.65rem 1.25rem;
-      border-radius: 8px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.875rem;
-      font-weight: 500;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.6rem 1.2rem; border-radius: 8px;
+      font-family: var(--font); font-size: 0.85rem; font-weight: 500;
+      text-decoration: none; cursor: pointer; transition: all 0.2s;
       margin-top: 0.5rem;
     }
-
     .btn-cta.looker {
-      border: 1px solid #f59e0b;
-      background: rgba(251,188,4,0.1);
-      color: #f59e0b;
+      border: 1px solid rgba(251,191,36,0.35);
+      background: rgba(251,191,36,0.08); color: var(--warning);
     }
+    .btn-cta.looker:hover { background: rgba(251,191,36,0.15); }
 
-    .btn-cta.looker:hover { background: rgba(251,188,4,0.2); }
-
-    /* ── TRANSPORT BADGE ── */
+    /* ── TRANSPORT BADGES ── */
     .transport-badges {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-top: 0.75rem;
+      display: flex; gap: 0.45rem;
+      flex-wrap: wrap; margin-top: 0.65rem;
     }
-
     .badge {
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
-      font-size: 0.73rem;
-      font-weight: 600;
+      padding: 0.22rem 0.6rem; border-radius: 6px;
+      font-size: 0.7rem; font-weight: 600;
     }
-
-    .badge.sse    { background: rgba(79,110,247,0.12); border: 1px solid rgba(79,110,247,0.25); color: var(--accent); }
-    .badge.http   { background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.25); color: #a78bfa; }
+    .badge.sse  { background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25); color: var(--accent-text); }
+    .badge.http { background: rgba(139,92,246,0.12); border: 1px solid rgba(139,92,246,0.25); color: #c4b5fd; }
 
     /* ── DIVIDER ── */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 1.5rem 0;
+    .divider { height: 1px; background: var(--card-border); margin: 1.25rem 0; }
+
+    /* ── FIELD CHIPS ── */
+    .field-chip {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 8px; padding: 0.55rem 0.8rem;
+      font-size: 0.8rem;
+    }
+    .field-chip .dim-label {
+      color: var(--muted); font-size: 0.65rem; display: block; margin-bottom: 1px;
     }
 
     /* ── TOAST ── */
     .toast {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      padding: 0.85rem 1.5rem;
-      border-radius: 10px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      z-index: 999;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s;
+      position: fixed; bottom: 1.75rem; right: 1.75rem;
+      padding: 0.8rem 1.4rem; border-radius: 12px;
+      font-size: 0.85rem; font-weight: 500; z-index: 999;
+      -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+      transform: translateY(100px); opacity: 0; transition: all 0.3s;
     }
-
     .toast.show { transform: translateY(0); opacity: 1; }
-    .toast.success { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3);  color: #86efac; }
-    .toast.error   { background: rgba(239,68,68,0.15);  border: 1px solid rgba(239,68,68,0.3);  color: #fca5a5; }
+    .toast.success { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.28); color: #86efac; }
+    .toast.error   { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.28); color: #fca5a5; }
 
     @media (max-width: 768px) {
       .sidebar { display: none; }
-      .main { margin-left: 0; padding: 1.5rem; max-width: 100vw; }
+      .main { margin-left: 0; padding: 1.4rem; max-width: 100vw; }
     }
   </style>
 </head>
@@ -823,7 +560,6 @@
       <button class="auth-tab" onclick="switchAuthTab('signup', this)">Sign up</button>
     </div>
 
-    <!-- Google SSO — shown on both login and signup -->
     <button class="btn-google" onclick="handleGoogleLogin()">
       <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
       Continue with Google
@@ -951,13 +687,13 @@
 
         </div>
 
-        <!-- ACCOUNT SELECTION (shown when Meta is connected) -->
+        <!-- ACCOUNT SELECTION -->
         <div id="account-section" style="display:none;">
           <div class="section-header">
             <div class="section-title-sm">📌 Active Ad Account</div>
             <div class="plan-badge" id="plan-badge">Free</div>
           </div>
-          <p style="font-size:0.83rem;color:var(--muted);margin-bottom:1rem;">
+          <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.9rem;">
             Select which Meta Ads account to use with Looker Studio and Claude. Free plan allows 1 account.
           </p>
           <div class="account-select-wrap">
@@ -970,7 +706,6 @@
             <span>✓</span><span id="account-selected-name"></span> is active
           </div>
 
-          <!-- PLAN CARDS -->
           <div class="section-header">
             <div class="section-title-sm">💳 Your Plan</div>
           </div>
@@ -1019,11 +754,11 @@
             <button class="btn-copy" onclick="copyText('mcp-url', this)">Copy</button>
           </div>
           <div class="transport-badges" style="justify-content:space-between;align-items:center;">
-            <div style="display:flex;gap:0.5rem;">
+            <div style="display:flex;gap:0.45rem;">
               <span class="badge sse">SSE — Claude Code</span>
               <span class="badge http">Streamable HTTP — Claude.ai web</span>
             </div>
-            <button onclick="regenerateMcpSecret(this)" style="background:transparent;border:1px solid rgba(239,68,68,0.3);color:var(--danger);font-family:'DM Sans',sans-serif;font-size:0.75rem;padding:0.3rem 0.75rem;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.1)'" onmouseout="this.style.background='transparent'">
+            <button onclick="regenerateMcpSecret(this)" style="background:transparent;border:1px solid rgba(248,113,113,0.3);color:var(--danger);font-family:var(--font);font-size:0.72rem;padding:0.28rem 0.7rem;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(248,113,113,0.1)'" onmouseout="this.style.background='transparent'">
               🔄 Regenerate
             </button>
           </div>
@@ -1110,34 +845,16 @@
         <div class="info-card">
           <div class="info-card-title">📐 Available fields</div>
           <p>The connector provides the following fields you can use in any Looker Studio chart:</p>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.5rem;margin-top:0.5rem;">
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
-              <span style="color:var(--muted);font-size:0.7rem;display:block;">DIMENSION</span>Date
-            </div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
-              <span style="color:var(--muted);font-size:0.7rem;display:block;">DIMENSION</span>Campaign
-            </div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
-              <span style="color:var(--muted);font-size:0.7rem;display:block;">DIMENSION</span>Ad Set
-            </div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
-              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>Spend (USD)
-            </div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
-              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>Impressions
-            </div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
-              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>Clicks
-            </div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
-              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>CTR (%)
-            </div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
-              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>CPC (USD)
-            </div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.85rem;font-size:0.82rem;">
-              <span style="color:var(--muted);font-size:0.7rem;display:block;">METRIC</span>CPM (USD)
-            </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.45rem;margin-top:0.5rem;">
+            <div class="field-chip"><span class="dim-label">DIMENSION</span>Date</div>
+            <div class="field-chip"><span class="dim-label">DIMENSION</span>Campaign</div>
+            <div class="field-chip"><span class="dim-label">DIMENSION</span>Ad Set</div>
+            <div class="field-chip"><span class="dim-label">METRIC</span>Spend (USD)</div>
+            <div class="field-chip"><span class="dim-label">METRIC</span>Impressions</div>
+            <div class="field-chip"><span class="dim-label">METRIC</span>Clicks</div>
+            <div class="field-chip"><span class="dim-label">METRIC</span>CTR (%)</div>
+            <div class="field-chip"><span class="dim-label">METRIC</span>CPC (USD)</div>
+            <div class="field-chip"><span class="dim-label">METRIC</span>CPM (USD)</div>
           </div>
         </div>
       </div>
@@ -1159,26 +876,15 @@
 
   let currentUser = null;
 
-  // ── INIT ──
   async function init() {
     const { data: { session } } = await sb.auth.getSession();
-    if (session?.user) {
-      currentUser = session.user;
-      showDashboard();
-    }
-
+    if (session?.user) { currentUser = session.user; showDashboard(); }
     sb.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        currentUser = session.user;
-        showDashboard();
-      } else {
-        currentUser = null;
-        showAuth();
-      }
+      if (session?.user) { currentUser = session.user; showDashboard(); }
+      else { currentUser = null; showAuth(); }
     });
   }
 
-  // ── AUTH TAB SWITCH ──
   function switchAuthTab(tab, btn) {
     document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
@@ -1187,18 +893,14 @@
     document.getElementById('auth-msg').className = 'auth-message';
   }
 
-  // ── GOOGLE LOGIN ──
   async function handleGoogleLogin() {
     const { error } = await sb.auth.signInWithOAuth({
       provider: 'google',
-      options: {
-        redirectTo: window.location.origin + '/dashboard/'
-      }
+      options: { redirectTo: window.location.origin + '/dashboard/' }
     });
     if (error) showAuthMsg(error.message, 'error');
   }
 
-  // ── LOGIN ──
   async function handleLogin() {
     const email    = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
@@ -1210,7 +912,6 @@
     if (error) showAuthMsg(error.message, 'error');
   }
 
-  // ── SIGNUP ──
   async function handleSignup() {
     const email    = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value;
@@ -1224,10 +925,8 @@
     else showAuthMsg('Account created! Check your email to confirm.', 'success');
   }
 
-  // ── LOGOUT ──
   async function handleLogout() { await sb.auth.signOut(); }
 
-  // ── SHOW SCREENS ──
   function showDashboard() {
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('dashboard-screen').style.display = 'block';
@@ -1239,17 +938,14 @@
     document.getElementById('dashboard-screen').style.display = 'none';
   }
 
-  // ── SETUP ──
   async function setupDashboard() {
     const email = currentUser.email;
     document.getElementById('user-email-display').textContent = email;
     document.getElementById('user-avatar').textContent = email[0].toUpperCase();
-
     await Promise.all([checkConnections(), loadMcpUrl()]);
     checkOAuthReturn();
   }
 
-  // ── LOAD MCP URL ──
   async function loadMcpUrl() {
     try {
       const { data: { session } } = await sb.auth.getSession();
@@ -1267,11 +963,9 @@
     }
   }
 
-  // ── REGENERATE MCP SECRET ──
   async function regenerateMcpSecret(btn) {
     if (!confirm('This will invalidate your current MCP URL. Any Claude integrations using the old URL will stop working. Continue?')) return;
-    btn.textContent = '⏳ Regenerating…';
-    btn.disabled = true;
+    btn.textContent = '⏳ Regenerating…'; btn.disabled = true;
     try {
       const { data: { session } } = await sb.auth.getSession();
       const res = await fetch(`${SERVER_URL}/api/mcp-secret/regenerate`, {
@@ -1283,14 +977,10 @@
         document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${mcp_secret}`;
         showToast('✓ MCP URL regenerated. Update your Claude settings.', 'success');
       }
-    } catch (e) {
-      showToast('Failed to regenerate. Try again.', 'error');
-    }
-    btn.textContent = '🔄 Regenerate';
-    btn.disabled = false;
+    } catch (e) { showToast('Failed to regenerate. Try again.', 'error'); }
+    btn.textContent = '🔄 Regenerate'; btn.disabled = false;
   }
 
-  // ── TAB NAVIGATION ──
   function showTab(tab) {
     ['connections', 'mcp', 'looker'].forEach(t => {
       document.getElementById('panel-' + t).classList.toggle('active', t === tab);
@@ -1298,53 +988,32 @@
     });
   }
 
-  // ── CHECK CONNECTIONS ──
   async function checkConnections() {
     try {
-      const { data, error } = await sb
-        .from('user_tokens')
-        .select('platform')
-        .eq('user_id', currentUser.id);
-
-      if (data) {
-        data.forEach(row => {
-          if (row.platform === 'meta') setMetaConnected(true);
-        });
-      }
-    } catch (e) {
-      console.error('checkConnections error:', e);
-    }
+      const { data } = await sb.from('user_tokens').select('platform').eq('user_id', currentUser.id);
+      if (data) data.forEach(row => { if (row.platform === 'meta') setMetaConnected(true); });
+    } catch (e) { console.error('checkConnections error:', e); }
   }
 
-  // ── LOAD ACCOUNTS + SETTINGS ──
   async function loadAccountSection() {
     document.getElementById('account-section').style.display = 'block';
     document.getElementById('accounts-select').innerHTML = '<option value="">Loading accounts…</option>';
-
     try {
-      // Fetch all accounts + current settings in parallel
       const { data: { session } } = await sb.auth.getSession();
       const [acctRes, settingsRes] = await Promise.all([
-        fetch(`${SERVER_URL}/api/accounts`, {
-          headers: { 'Authorization': `Bearer ${session.access_token}` }
-        }),
-        fetch(`${SERVER_URL}/api/user-settings?platform=meta`, {
-          headers: { 'Authorization': `Bearer ${session.access_token}` }
-        })
+        fetch(`${SERVER_URL}/api/accounts`, { headers: { 'Authorization': `Bearer ${session.access_token}` } }),
+        fetch(`${SERVER_URL}/api/user-settings?platform=meta`, { headers: { 'Authorization': `Bearer ${session.access_token}` } })
       ]);
+      const acctData   = await acctRes.json();
+      const settings   = await settingsRes.json();
+      const accounts   = (acctData.data || []).filter(a => a.account_status === 1);
+      const selectedId = settings.selected_account_id || '';
+      const plan       = settings.plan || 'free';
 
-      const acctData     = await acctRes.json();
-      const settings     = await settingsRes.json();
-      const accounts     = (acctData.data || []).filter(a => a.account_status === 1);
-      const selectedId   = settings.selected_account_id || '';
-      const plan         = settings.plan || 'free';
-
-      // Update plan badge
       const badge = document.getElementById('plan-badge');
       badge.textContent = plan === 'pro' ? 'Pro' : 'Free';
       badge.className   = plan === 'pro' ? 'plan-badge pro' : 'plan-badge';
 
-      // Update plan cards
       if (plan === 'pro') {
         document.getElementById('plan-free').classList.remove('current');
         document.getElementById('plan-pro').classList.add('current');
@@ -1355,36 +1024,27 @@
 
       const select = document.getElementById('accounts-select');
       select.innerHTML = '<option value="">— Select an ad account —</option>';
-
-      if (accounts.length === 0) {
-        select.innerHTML = '<option value="">No active accounts found</option>';
-        return;
-      }
+      if (accounts.length === 0) { select.innerHTML = '<option value="">No active accounts found</option>'; return; }
 
       accounts.forEach(account => {
         const cleanId = account.id.replace('act_', '');
         const opt = document.createElement('option');
-        opt.value = cleanId;
-        opt.dataset.name = account.name;
-        opt.dataset.currency = account.currency;
+        opt.value = cleanId; opt.dataset.name = account.name; opt.dataset.currency = account.currency;
         opt.textContent = `${account.name} (${account.currency})`;
         if (cleanId === selectedId) opt.selected = true;
         select.appendChild(opt);
       });
 
-      // Show selected info if one is already active
       if (selectedId) {
-        const selectedAccount = accounts.find(a => a.id.replace('act_', '') === selectedId);
-        if (selectedAccount) showSelectedInfo(selectedAccount.name);
+        const sel = accounts.find(a => a.id.replace('act_', '') === selectedId);
+        if (sel) showSelectedInfo(sel.name);
       }
-
     } catch (e) {
       document.getElementById('accounts-select').innerHTML = '<option value="">Failed to load accounts</option>';
       console.error(e);
     }
   }
 
-  // ── DROPDOWN CHANGE ──
   async function onAccountSelectChange(select) {
     const accountId   = select.value;
     const accountName = select.options[select.selectedIndex]?.dataset.name || '';
@@ -1392,32 +1052,17 @@
     await selectAccount(accountId, accountName);
   }
 
-  // ── SELECT ACCOUNT ──
   async function selectAccount(accountId, accountName) {
     try {
       const { data: { session } } = await sb.auth.getSession();
       const res = await fetch(`${SERVER_URL}/api/user-settings`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          platform:              'meta',
-          selected_account_id:   accountId,
-          selected_account_name: accountName
-        })
+        headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ platform: 'meta', selected_account_id: accountId, selected_account_name: accountName })
       });
-
-      if (res.ok) {
-        showSelectedInfo(accountName);
-        showToast(`✓ "${accountName}" set as active account`, 'success');
-      } else {
-        showToast('Failed to save selection. Try again.', 'error');
-      }
-    } catch (e) {
-      showToast('Error saving account selection.', 'error');
-    }
+      if (res.ok) { showSelectedInfo(accountName); showToast(`✓ "${accountName}" set as active account`, 'success'); }
+      else showToast('Failed to save selection. Try again.', 'error');
+    } catch (e) { showToast('Error saving account selection.', 'error'); }
   }
 
   function showSelectedInfo(name) {
@@ -1425,82 +1070,48 @@
     document.getElementById('account-selected-info').classList.add('show');
   }
 
-  // ── CONNECT META ──
-  function connectMeta() {
-    window.location.href = `${SERVER_URL}/oauth/meta?user_id=${currentUser.id}`;
-  }
+  function connectMeta() { window.location.href = `${SERVER_URL}/oauth/meta?user_id=${currentUser.id}`; }
 
-  // ── DISCONNECT META ──
   async function disconnectMeta() {
-    const { error } = await sb
-      .from('user_tokens')
-      .delete()
-      .eq('user_id', currentUser.id)
-      .eq('platform', 'meta');
-
-    if (!error) {
-      setMetaConnected(false);
-      showToast('Meta Ads disconnected.', 'success');
-    }
+    const { error } = await sb.from('user_tokens').delete().eq('user_id', currentUser.id).eq('platform', 'meta');
+    if (!error) { setMetaConnected(false); showToast('Meta Ads disconnected.', 'success'); }
   }
 
-  // ── OAUTH RETURN ──
   function checkOAuthReturn() {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('connected') === 'meta') {
-      setMetaConnected(true);
-      showToast('✓ Meta Ads connected!', 'success');
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-    if (params.get('error') === 'oauth_failed') {
-      showToast('Meta connection failed. Try again.', 'error');
-      window.history.replaceState({}, '', window.location.pathname);
-    }
+    if (params.get('connected') === 'meta') { setMetaConnected(true); showToast('✓ Meta Ads connected!', 'success'); window.history.replaceState({}, '', window.location.pathname); }
+    if (params.get('error') === 'oauth_failed') { showToast('Meta connection failed. Try again.', 'error'); window.history.replaceState({}, '', window.location.pathname); }
   }
 
-  // ── META STATUS UI ──
   function setMetaConnected(connected) {
     const status = document.getElementById('meta-status');
     const btn    = document.getElementById('meta-btn');
     if (connected) {
-      status.textContent = 'Connected';
-      status.className   = 'status-badge connected';
-      btn.textContent    = '✕ Disconnect';
-      btn.className      = 'btn-connect connected';
-      btn.onclick        = disconnectMeta;
+      status.textContent = 'Connected'; status.className = 'status-badge connected';
+      btn.textContent = '✕ Disconnect'; btn.className = 'btn-connect connected'; btn.onclick = disconnectMeta;
       loadAccountSection();
     } else {
-      status.textContent = 'Not connected';
-      status.className   = 'status-badge disconnected';
-      btn.textContent    = '+ Connect with Meta';
-      btn.className      = 'btn-connect';
-      btn.onclick        = connectMeta;
+      status.textContent = 'Not connected'; status.className = 'status-badge disconnected';
+      btn.textContent = '+ Connect with Meta'; btn.className = 'btn-connect'; btn.onclick = connectMeta;
       document.getElementById('account-section').style.display = 'none';
     }
   }
 
-  // ── COPY ──
   function copyText(elementId, btn) {
-    const text = document.getElementById(elementId).textContent;
-    navigator.clipboard.writeText(text);
-    const orig = btn.textContent;
-    btn.textContent = '✓ Copied!';
+    navigator.clipboard.writeText(document.getElementById(elementId).textContent);
+    const orig = btn.textContent; btn.textContent = '✓ Copied!';
     setTimeout(() => btn.textContent = orig, 2000);
   }
 
-  // ── TOAST ──
   function showToast(msg, type = 'success') {
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = `toast ${type} show`;
+    t.textContent = msg; t.className = `toast ${type} show`;
     setTimeout(() => t.classList.remove('show'), 3500);
   }
 
-  // ── AUTH MSG ──
   function showAuthMsg(msg, type) {
     const el = document.getElementById('auth-msg');
-    el.textContent = msg;
-    el.className = `auth-message ${type}`;
+    el.textContent = msg; el.className = `auth-message ${type}`;
   }
 
   init();
