@@ -347,25 +347,52 @@
     <div class="platforms">
       <span>Works with</span>
       <div class="platform-icons">
-        <!-- Meta Ads -->
+        <!-- Meta Ads — infinity loop -->
         <div class="platform-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-label="Meta Ads">
-            <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 26" width="24" height="12" aria-label="Meta Ads">
+            <defs>
+              <linearGradient id="meta-g" x1="0%" y1="30%" x2="100%" y2="70%">
+                <stop offset="0%" stop-color="#0082FB"/>
+                <stop offset="100%" stop-color="#0099FF"/>
+              </linearGradient>
+            </defs>
+            <!-- Left loop -->
+            <path d="M27 13C27 7 23 2 17 2C9 2 3 7 3 13C3 19 9 24 17 24C23 24 27 19 27 13Z" fill="url(#meta-g)"/>
+            <!-- Right loop -->
+            <path d="M27 13C27 7 31 2 37 2C45 2 51 7 51 13C51 19 45 24 37 24C31 24 27 19 27 13Z" fill="url(#meta-g)"/>
+            <!-- Centre crossover shadow (3-D depth) -->
+            <path d="M23 9C25 8 27 9 27 13C27 17 25 18 23 17C21 16 20 15 20 13C20 11 21 10 23 9Z" fill="#0064D2" opacity="0.35"/>
           </svg>
         </div>
-        <!-- Claude AI -->
+        <!-- Claude AI — coral starburst -->
         <div class="platform-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 46" width="20" height="20" aria-label="Claude AI">
-            <circle cx="23" cy="23" r="23" fill="#D97757"/>
-            <path d="M29.8 13H27l-4 10.5L19 13h-2.8l5.2 14h2.4l2-5.3 2 5.3h2.4l5.2-14H32.8l-4 10.5-3-8.5 1.4-3.7c.3-.7.6-1 1.1-1.1H29.8z" fill="white"/>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="20" height="20" aria-label="Claude AI">
+            <g transform="translate(50,50)" fill="#CC5533">
+              <rect x="-4.5" y="-46" width="9" height="40" rx="4.5" transform="rotate(0)"/>
+              <rect x="-4.5" y="-46" width="9" height="40" rx="4.5" transform="rotate(36)"/>
+              <rect x="-4.5" y="-46" width="9" height="40" rx="4.5" transform="rotate(72)"/>
+              <rect x="-4.5" y="-46" width="9" height="40" rx="4.5" transform="rotate(108)"/>
+              <rect x="-4.5" y="-46" width="9" height="40" rx="4.5" transform="rotate(144)"/>
+              <rect x="-4.5" y="-46" width="9" height="40" rx="4.5" transform="rotate(180)"/>
+              <rect x="-4.5" y="-46" width="9" height="40" rx="4.5" transform="rotate(216)"/>
+              <rect x="-4.5" y="-46" width="9" height="40" rx="4.5" transform="rotate(252)"/>
+              <rect x="-4.5" y="-46" width="9" height="40" rx="4.5" transform="rotate(288)"/>
+              <rect x="-4.5" y="-46" width="9" height="40" rx="4.5" transform="rotate(324)"/>
+            </g>
           </svg>
         </div>
-        <!-- Looker Studio -->
+        <!-- Looker Studio — 3 staggered pill bars -->
         <div class="platform-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-label="Looker Studio">
-            <rect x="2"  y="13" width="5" height="9"  rx="1.2" fill="#4285F4"/>
-            <rect x="9"  y="7"  width="5" height="15" rx="1.2" fill="#EA4335"/>
-            <rect x="16" y="2"  width="5" height="20" rx="1.2" fill="#34A853"/>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="20" height="20" aria-label="Looker Studio">
+            <!-- Bar 1 (top) -->
+            <rect x="5" y="7"  width="52" height="21" rx="10.5" fill="#7BABF8"/>
+            <circle cx="57" cy="17.5" r="10.5" fill="#3367D6"/>
+            <!-- Bar 2 (middle) -->
+            <rect x="5" y="40" width="38" height="21" rx="10.5" fill="#7BABF8"/>
+            <circle cx="43" cy="50.5" r="10.5" fill="#3367D6"/>
+            <!-- Bar 3 (bottom) -->
+            <rect x="5" y="73" width="46" height="21" rx="10.5" fill="#7BABF8"/>
+            <circle cx="51" cy="83.5" r="10.5" fill="#3367D6"/>
           </svg>
         </div>
       </div>
