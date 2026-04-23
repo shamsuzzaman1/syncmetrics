@@ -44,7 +44,7 @@
 
 <div class="container">
   <h1>Privacy Policy</h1>
-  <p class="meta">Effective date: April 20, 2025 &nbsp;·&nbsp; SyncMetrics (syncmetrics.io)</p>
+  <p class="meta">Effective date: April 23, 2026 &nbsp;·&nbsp; SyncMetrics (syncmetrics.io)</p>
 
   <p>SyncMetrics connects your advertising accounts — Meta Ads and Google Ads — to AI tools (Claude via MCP) and reporting tools (Looker Studio), so you can analyse performance data in plain language. This policy explains what data we access, how we protect it, and your rights.</p>
 
@@ -113,7 +113,8 @@
   <ul>
     <li><strong>Disconnect a platform</strong> — click "Disconnect" on your <a href="/dashboard">dashboard</a>. Your access token is deleted immediately from our systems.</li>
     <li><strong>Delete your account</strong> — email <a href="mailto:support@syncmetrics.io">support@syncmetrics.io</a>. All your data will be permanently deleted within 7 days.</li>
-    <li><strong>Via Meta</strong> — removing SyncMetrics from your <a href="https://www.facebook.com/settings?tab=business_tools" target="_blank">Facebook App Settings</a> triggers our data deletion callback and automatically deletes your Meta token.</li>
+    <li><strong>Via Meta (deauthorize)</strong> — removing SyncMetrics from your <a href="https://www.facebook.com/settings?tab=business_tools" target="_blank">Facebook App Settings</a> automatically triggers our deauthorize callback (<code>POST /deauthorize</code>), which deletes your Meta access token from our systems immediately.</li>
+    <li><strong>Via Meta (full data deletion)</strong> — submitting a data deletion request through Facebook triggers our data deletion callback (<code>POST /data-deletion</code>), which deletes your Meta token and all associated account settings. You can verify deletion status at <a href="https://syncmetrics.io/data-deletion" target="_blank">syncmetrics.io/data-deletion</a>.</li>
     <li><strong>Via Google</strong> — revoking access from your <a href="https://myaccount.google.com/permissions" target="_blank">Google Account Permissions</a> page. Email us to confirm full deletion.</li>
   </ul>
 
