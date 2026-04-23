@@ -304,15 +304,25 @@
         <div class="page-header"><h1 class="page-title">Claude MCP Server</h1><p class="page-sub">Ask Claude questions about your ad data in natural language</p></div>
         <div class="info-card">
           <div class="info-card-title">🤖 Your personal MCP URL</div>
-          <p>This URL is unique to your account. Anyone with it can query your ad data — keep it private.</p>
-          <p style="font-size:0.8rem;color:var(--warning);background:rgba(217,119,6,0.07);border:1px solid rgba(217,119,6,0.2);border-radius:8px;padding:0.55rem 0.8rem;margin-bottom:0.9rem;">⚠️ If you regenerate your URL, the previous one will immediately stop working. Update it in all tools where you've added it.</p>
-          <div class="url-row">
-            <div class="url-box" id="mcp-url">Loading…</div>
-            <button class="btn-copy" onclick="copyText('mcp-url', this)">Copy</button>
+
+          <!-- No token yet -->
+          <div id="mcp-no-token">
+            <p style="margin-bottom:1rem;">Generate a personal MCP URL to connect Claude to your Meta Ads data. Your URL is private — keep it secure.</p>
+            <button onclick="generateMcpSecret(this)" style="padding:0.65rem 1.4rem;border:none;border-radius:var(--r-btn);background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:var(--font);font-size:0.88rem;font-weight:600;cursor:pointer;box-shadow:0 4px 16px var(--glow);">Generate MCP Token</button>
           </div>
-          <div class="transport-badges" style="justify-content:space-between;align-items:center;">
-            <div style="display:flex;gap:0.45rem;"><span class="badge sse">SSE — Claude Code</span><span class="badge http">Streamable HTTP — Claude.ai web</span></div>
-            <button onclick="regenerateMcpSecret(this)" style="background:transparent;border:1px solid rgba(220,38,38,0.25);color:var(--danger);font-family:var(--font);font-size:0.72rem;padding:0.28rem 0.7rem;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(220,38,38,0.06)'" onmouseout="this.style.background='transparent'">🔄 Regenerate</button>
+
+          <!-- Token exists -->
+          <div id="mcp-has-token" style="display:none;">
+            <p>This URL is unique to your account. Anyone with it can query your ad data — keep it private.</p>
+            <p style="font-size:0.8rem;color:var(--warning);background:rgba(217,119,6,0.07);border:1px solid rgba(217,119,6,0.2);border-radius:8px;padding:0.55rem 0.8rem;margin:0.75rem 0;">⚠️ If you regenerate your URL, the previous one will immediately stop working. Update it in all tools where you've added it.</p>
+            <div class="url-row">
+              <div class="url-box" id="mcp-url"></div>
+              <button class="btn-copy" onclick="copyText('mcp-url', this)">Copy</button>
+            </div>
+            <div class="transport-badges" style="justify-content:space-between;align-items:center;margin-top:0.65rem;">
+              <div style="display:flex;gap:0.45rem;"><span class="badge sse">SSE — Claude Code</span><span class="badge http">Streamable HTTP — Claude.ai web</span></div>
+              <button onclick="regenerateMcpSecret(this)" style="background:transparent;border:1px solid rgba(220,38,38,0.25);color:var(--danger);font-family:var(--font);font-size:0.72rem;padding:0.28rem 0.7rem;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(220,38,38,0.06)'" onmouseout="this.style.background='transparent'">🔄 Regenerate</button>
+            </div>
           </div>
         </div>
         <div class="info-card">
@@ -383,21 +393,38 @@
     await Promise.all([checkConnections(), loadMcpUrl()]);
     checkOAuthReturn();
   }
+  function showMcpToken(secret) {
+    document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${secret}`;
+    document.getElementById('mcp-no-token').style.display = 'none';
+    document.getElementById('mcp-has-token').style.display = 'block';
+  }
   async function loadMcpUrl() {
     try {
       const { data: { session } } = await sb.auth.getSession();
       const res = await fetch(`${SERVER_URL}/api/mcp-secret`, { headers: { 'Authorization': `Bearer ${session.access_token}` } });
-      if (res.ok) { const { mcp_secret } = await res.json(); document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${mcp_secret}`; }
-      else document.getElementById('mcp-url').textContent = 'Connect Meta Ads first to get your URL';
-    } catch (e) { document.getElementById('mcp-url').textContent = 'Failed to load URL'; }
+      if (res.ok) {
+        const { mcp_secret } = await res.json();
+        if (mcp_secret) { showMcpToken(mcp_secret); }
+        else { document.getElementById('mcp-no-token').style.display = 'block'; document.getElementById('mcp-has-token').style.display = 'none'; }
+      }
+    } catch (e) { console.error('Failed to load MCP URL', e); }
+  }
+  async function generateMcpSecret(btn) {
+    btn.textContent = '⏳ Generating…'; btn.disabled = true;
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      const res = await fetch(`${SERVER_URL}/api/mcp-secret/generate`, { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}` } });
+      if (res.ok) { const { mcp_secret } = await res.json(); showMcpToken(mcp_secret); showToast('✓ MCP token generated.', 'success'); }
+    } catch (e) { showToast('Failed to generate. Try again.', 'error'); }
+    btn.textContent = 'Generate MCP Token'; btn.disabled = false;
   }
   async function regenerateMcpSecret(btn) {
     if (!confirm('This will invalidate your current MCP URL. Continue?')) return;
     btn.textContent = '⏳ Regenerating…'; btn.disabled = true;
     try {
       const { data: { session } } = await sb.auth.getSession();
-      const res = await fetch(`${SERVER_URL}/api/mcp-secret/regenerate`, { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}` } });
-      if (res.ok) { const { mcp_secret } = await res.json(); document.getElementById('mcp-url').textContent = `${SERVER_URL}/mcp/${mcp_secret}`; showToast('✓ MCP URL regenerated.', 'success'); }
+      const res = await fetch(`${SERVER_URL}/api/mcp-secret/generate`, { method: 'POST', headers: { 'Authorization': `Bearer ${session.access_token}` } });
+      if (res.ok) { const { mcp_secret } = await res.json(); showMcpToken(mcp_secret); showToast('✓ MCP URL regenerated.', 'success'); }
     } catch (e) { showToast('Failed to regenerate. Try again.', 'error'); }
     btn.textContent = '🔄 Regenerate'; btn.disabled = false;
   }
